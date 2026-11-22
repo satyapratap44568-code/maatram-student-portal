@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Maatram Student Portal (pilot)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=Noto+Sans+Tamil:wght@400;600;800&display=swap">
+<style>
+*{box-sizing:border-box}
+:root{--bg:#faf8f0;--cd:#fff;--tx:#0a0a0a;--mu:#4a4635;--ac:#ffc20e;--bd:#e2dcc8;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12110d;--cd:#1c1a14;--tx:#f4f1e6;--mu:#b9b39d;--bd:#37332a}}
+:root[data-theme="dark"]{--bg:#12110d;--cd:#1c1a14;--tx:#f4f1e6;--mu:#b9b39d;--bd:#37332a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 Manrope,"Noto Sans Tamil",system-ui,sans-serif}
+.lo{height:38px;width:auto;display:block}.hd{background:var(--ac);color:#0a0a0a;padding:8px 16px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.lg{border:0;background:#0a0a0a;color:#ffc20e;border-radius:99px;padding:8px 11px;margin-left:5px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}.hd b{font-size:15px}.hd span{white-space:nowrap}
+.w{max-width:640px;margin:0 auto;padding:14px 16px 96px}
+h1{font-size:22px;margin:10px 0}h2{font-size:17px;margin:18px 0 6px}
+.cd{background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:14px;margin:10px 0}
+.mu{color:var(--mu);font-size:13px}.er{color:var(--tx);font-weight:700;font-size:13px;margin:6px 0}
+label,.lb{display:block;font-size:13px;font-weight:600;color:var(--mu);margin:8px 0 4px}
+.in{width:100%;height:46px;border:1.5px solid var(--bd);border-radius:12px;padding:0 12px;background:var(--cd);color:var(--tx);font:inherit}
+textarea.in{height:auto;padding:10px}
+.bt,.ol{height:46px;border-radius:12px;padding:0 16px;font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;margin:8px 0}
+.bt{border:0;background:var(--ac);color:#0a0a0a}.fm .bt,form>.bt{width:100%}
+.ol{border:2px solid var(--tx);background:transparent;color:var(--tx)}
+.sg{display:flex;gap:6px;margin:8px 0}.sg button{flex:1;height:42px;border:1.5px solid var(--bd);border-radius:10px;background:var(--cd);color:var(--tx);font-family:inherit;font-size:13px;font-weight:700}
+.sg .on{background:var(--ac);color:#0a0a0a;border-color:var(--ac)}
+.rw{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.pl{font-size:12px;font-weight:800;padding:3px 10px;border-radius:99px;border:1.5px solid var(--tx);white-space:nowrap}
+.pl.verified,.pl.d{background:var(--ac);border-color:var(--ac);color:#0a0a0a}.pl.needs,.pl.k{background:var(--tx);color:var(--bg)}
+.ac{background:var(--ac);color:#0a0a0a;border:0}.bar{height:8px;background:#0a0a0a33;border-radius:4px;margin-top:8px}.bar i{display:block;height:8px;background:#0a0a0a;border-radius:4px}
+.gr{display:grid;grid-template-columns:1fr 1fr;gap:10px}.gr .cd{margin:0}.bn{font-size:24px;font-weight:800}
+.th{width:64px;height:64px;object-fit:cover;border-radius:10px;margin-top:6px}
+.r{display:flex;gap:8px;margin-bottom:8px}.r .in:first-child{flex:2}.r .in{flex:1;min-width:0}
+.ck{display:flex;gap:12px;align-items:center}.ck input{width:20px;height:20px}
+.pg{display:flex;gap:6px;margin:6px 0}.pg i{flex:1;height:6px;border-radius:3px;background:var(--bd)}.pg i.on{background:var(--tx)}
+.tb{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--cd);border-top:1px solid var(--bd);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tb button{flex:1;border:0;background:none;color:var(--mu);padding:14px 2px;font-family:inherit;font-size:13px;font-weight:600}.tb .on{color:var(--tx);font-weight:800;box-shadow:inset 0 -3px var(--ac)}
+.sg-b{height:44px;border:1.5px solid var(--bd);border-radius:10px;background:var(--cd);color:var(--mu);font-family:inherit;font-size:13px;cursor:pointer}.sg-b.on{background:var(--ac);color:#0a0a0a;border-color:var(--ac);font-weight:800}
+.hm{border:0;border-radius:8px;width:100%;height:40px;font-family:inherit;font-size:12px;font-weight:700;color:#0a0a0a;cursor:pointer}
+#app{overflow-wrap:anywhere}.rw{flex-wrap:wrap}table.t{display:block;overflow-x:auto;max-width:100%;border-collapse:collapse;font-size:13px}table.t td,table.t th{padding:6px 4px;border-bottom:1px solid var(--bd);text-align:left;vertical-align:top}
+</style></head>
+<body><div id="app"></div>
+<script>
+const $=s=>document.querySelector(s),uid=()=>Math.random().toString(36).slice(2,9),td=()=>new Date().toISOString().slice(0,10);
+const E=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const LOGO='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAACICAMAAADu+pYMAAABMmlDQ1BJQ0MgUHJvZmlsZQAAeJx9kD9Lw0AYxn+Wgn+og+jokLGLUhW6qEsVi05SI1id0jRJhbaGJKUIbn4BP4Tg7ChCZwcFQXAUP4I4uMYnCZIu9T3eu98993B37wuFGRTFCvT6UdCo14yT5qkx/cmURhqWHfpMDrl+3jPv28o/vkkx23ZCW+uXsh3ocV1pipe8jDsJtzK+SngY+ZH4JuHAbOyIb8Vlb4xbY2z7QeJ/Fm/1ugM7/zclp398pHVPucwu54T4dLG4xOCQDc117XoMiMRDOSI6opCGTmoik0COvhQXR0zSv+yJ6w/YHsVx/JhrByO4r8LcQ66VN2GhBE8vuZb31LcCK5WKyoLrwvcdzDdh8VX3nP01ckJtRlpbnQsNT7U5Uvb1X5tV0ToV1qj+AiCUTfu+YhZyAAAAwFBMVEWenp5fX18wLCLc29i3jB5mUBjXqCOQcB1INxKwih75ySj35qH3011tbQNvVhj/7ln9+QhzMhCUciP///XWqjXLozP//60+MQCqVQD/AACQciT/fwAxJAeziiJNNhF2WB3/f39OLAd/f3+qqlXzv0UAAAD9/f0AAAD+wg4sGgCCYwsiFwcYFhH5vAxMNQuqqgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBidfKAAAAMHRSTlP///7/TPv///v/////AqAXBgZfBC5RCQgDAYkCijK2cAJoAgMs/v8A/2hn/v7/zwOtYwMAAAAJeElEQVR42u2dh3qjOBCApVFEs2MnTttkb2+vyXCHyL7/250aQjQDBpwEo+9L3AakXzMaVXtQ7KY7+W//4/7w31dPh8PL/kHA3MaVhJznr/eC9rCDlC0iwfvuaR/H31qBhXr3O+BsQSmlN7nd1oG/xQ9vwJaW+PtTmdgC38d7ypaY4O05/l4Hvo+fArbMxHfPjo5Rbs+L5RXJJdbA+6Xac65jYcEu8Ovtw5J5hbe+sb2TAr6ND2zZKdjnRo0U7x4WDsx28UsB/BLvls7L4DH+IwcWCg4WDyxUfFsAH9LlAwcP8at1Wsu3aOGon+JfGvgufr4Ci2bsTffFUsP79BqAf9N+Wpk0uw5g47R+xT/4NQC/F8A36Qq8Aq/AK/AKvAKvwCvwCrwCr8Ar8Aq8Aq/AK/AKvHhgjBCeLmsYemwGEEL8ksBwFGk64iDKPM8fsBhORPbkksD4OEWOLAjNJiWNsiRJPNpTa6q+R1f4YOCxOaZhElHz3EskceTRAcDoiwFTT6jVNy98BZwlUcj7mvRFgSewKV8B5sBUAct3POgLTC4IzEdXsVZpIh1VKhAhShJDnPUgRpcGHm1TRqOZMGCaRT7jWVIQp8sDDgxbKNGFe869lrHqzuu1D+FN4wM8D/DIKvaMj6IszeTTgIWJo2PaDxga30efENiPjItKTVv2gBbASbdRQzPwMF86bGg5BphbjyyfRkk1Fc57ILBSw5HAZwOmkW3CQZJtN0kmUhmZ9/EhuBlYFAxPDgxjgL1CkWJMuT2SbVIB7mzFp4H7NeRBwHwEMDiW6yfRZkOO2zKwct/dPuQE8BEmBtbzlfNmaIV/CqWGN0dFXNawNxYYzwF8PA/Yt8CeaMNCw/JWFdfVNcDEjVAwIzDqaTcNyXa5ssPNIkKEho+bip8OegAj1qriPsZ3BjA+02dlxZjKT7ZE2vRxO8hrtQAD6a/ggcB4AmCt4g3ZHKWKs5KG6Xm9hCaeoVtqq+JBJi3baips+ihbMUmGAPPWRR652tbPtwwDhmmAM6lupeGK2wrmc5ojgMlIL62QxexhK2/m9Ew9pogjnOZ5wCMWDot+WA4pt9tIE28yZ77kzeg0RwCfV8WpddJRlMlxhyDeGGANXYy0AKZ3mmcCj++It7r7lcRb1YgFbbSNHJ+FSN1PgK4DPH4Z7xxgXC4Kxhh62rR0VbrlRnnfuYlkfywejEXrhbNSHiCr4Cg3HepOk6vs+WzAFZvSRZHtGnUzi+lStjHikXZZboq0gvMbVhc61Diq4jQBE2Kyx3MC51WMiVvgTmSaFJRiolQl3nilYSJunP25ThOQeznBswA7NsVRVUddjcuTdkywvI6I9lwlxub+RFUkqs+FhPNwgMvV3afGzwHmtixQza+0zCJGPnkqWjhsFBY2/W+2NSNCU3Rk8IwEt7y6jtQnyAKjevYzjKW1TaHCt7RkWSkNMcM+ojmUk5K90dbcDOfAXPNweytckUB5VaDG7NH0wHkVN2foFLNB99i9Nsosb7HgnfPllottHRoJbLpF3JI9mg2YtOSoyJqsnetrrbo2201RQOT4JCuBANUk8l7CLtwNtuqhwHkV6xoHLvpBRCp1jJtVb9s/rynEOH9wfVdZApUlkGkptew71wDOAsbM8R7KRZVcKWo2tuIAAaqWDpf1V9gIqYx48korHUYAlxlPDJznxMvjP6dPxEb7wjvLVHhYXG3jjlN3XFLgSvDqEI84fqBQJi/6KDQHsLJLVO7qLTJmpJwvdroU1wU5Y3LkSIBdEHZ3E5Bry1x1w6hh42l64JbFcMdQgVckoA6MK3sjNeBmCSjcW9tW20zAwmDrA3aTo9YOnASWJ5B4fb3bnXzi0poNdzsq3V5aVmunbsPOmihRwyiTUO44kC5cGzCcWkhpn23bMXzRA8j869lP7qXdZe/GZMwOqpqHE8ClBgqnp6XkdPaT98PtY6wiQ6FiwurAuBWHODXVqCIolIdPZj/9SKuD2FQwr8uDKjXqtFfUmiUqu+MLjaWNx2k2LNRujmoATBqPSvKi6Vb7mlIz4nbaj0hj/mSO2VJpaUV4LWITapuPog5ngjp1U+8K8+zd/PutAFzg+HDHyRDc6VwnOa50QeDTh3C7zzPi4/jl94sCy8F9q8UC6cc72anlDz4R332asbtGvhJwX17ElgEMl+f9UOBuGjyxPX8scLc3QsfJeT8QmOt5zikLUAIT/4rbx39v6cI/iDPs6GFNIX6Yf0uFm6OhvrgLUBoGPhefUP01Har++0KEhiYX3w98cV1Aqbww8EAJCREQF6pP0+rt0lBut1GR5IPPUr9a4h72MPRLHhXiIKLMV7tggT5VxuVXVMTMyGPAxQsWqk1u/Z9GwEKvqCpIhVzKQkEs5Fkg2SKfSRzxnrqtvh0XH6eiGmQWVJ4rF2+mRrLS5iddANBj2nysrnVOvZRq4FCpOMjxNb2vFCqkZG2AH4Kf7/LTUGpSXiv/LDD1lDVITUepvR3oavICXXfyj1P7JS+7jTX1Eo/aCIA8aWDuhao0aaC5KWg2U0KQZWQBqNoQwn5gNexzCRxpS5fyVAKnUsdKw0qS6hvY2zGleKXhNI383JBNIhMDc1Tb96YQ0ECYpSytLIZQjzJfo1IvlRoFKl4rGdH8HJNWDxRUS/R83TIpU23a80E2WPHSuV0qc+BhEKhWT1ng17ptgqb10rUGItcuufwn/qTSRbNMVdnUoqb8BOSDllFX55nkB1fKj5yb6a7+Jmb1dmkhmcJ5Lv9y3ZLZMm73ozyX4J+mWxo1QzSrMHC2xNcB5mZ/qf3kC2DS+2zMZwfmZj+TtJoq2PrAbP40LzAMob3MGHNGYNsq21hy5V+Odj5g6GRxJT7t5GEg7LGtD3JhL/0b3tMCu9t4jSy8LPEBv5U6KbA9u9GqONIp8fWATyoOfZxq5zHpLsXJdZ2P/c3f9adpVuAVeAX+msB/x4/X9ZPp1/Kj+LQAvg4N2ygA1xLY4mcR2OI6Qpf80NFpkIwPd7gCm4ZnG5zmGuJLFRGmdESt5dt06gSYiv+K/7mCEGL3pSBxS1cxPObRLQ3w/n3RvPzNBj7UgR5v48dFG/Vuf/taDeW55Lhpv5t4aW6w1pf4sFgd/753wtPacLy38c0yR5jp7sENrF0EXL6X8aWXxxvcPJcCiTshtb/F8RNdGHLwtm8Nqa0iqj887t6XEkY8BXoQuPd3rVHidRD5h7ubn/9+/fTn4UmRfi8HiY//B5sfu/06nMrAAAAAAElFTkSuQmCC';
+const KEY='maatram_pilot_v1',CO='Example Engineering College';
+const T={en:{brand:'Maatram Foundation',login:'Login',reg:'New registration',id:'Maatram ID',pw:'Password',student:'Student',alumni:'Alumni',office:'Office',home:'Home',marks:'Marks',docs:'Documents',act:'Activity',prof:'Profile',out:'Log out',next:'Next',save:'Save',sub:'Submit',add:'Add',back:'Back',forgot:'Forgot password?',more:'More',volunteer:'Volunteer'},
+ta:{brand:'மாற்றம் அறக்கட்டளை',login:'உள்நுழை',reg:'புதிய பதிவு',id:'மாற்றம் ஐடி',pw:'கடவுச்சொல்',student:'மாணவர்',alumni:'முன்னாள் மாணவர்',office:'அலுவலகம்',home:'முகப்பு',marks:'மதிப்பெண்கள்',docs:'ஆவணங்கள்',act:'செயல்பாடுகள்',prof:'சுயவிவரம்',out:'வெளியேறு',next:'அடுத்து',save:'சேமி',sub:'சமர்ப்பி',add:'சேர்',back:'பின்',forgot:'கடவுச்சொல் மறந்ததா?',more:'மேலும்',volunteer:'தன்னார்வலர்'}};
+function seed(){const r=(id,kind,name,y)=>({id,kind,name,mobile:'98765432'+id.slice(-2),college:CO,course:'B.E. Mechanical',year:y,dob:'2005-05-0'+id.slice(-1),email:id.toLowerCase()+'@example.com'});
+return{roster:[r('S001','student','Priya S',2024),r('S002','student','Arun K',2023),r('M001','mentor','Karthik R',2019),r('M002','mentor','Divya M',2020),{id:'O001',kind:'staff',name:'Maatram Office',college:'',course:'',year:0}],users:{},prof:{},par:{},edu:{},marks:[],docs:{},ach:[],vol:[],links:{},upd:{},resets:{}}}
+function load(){try{const r=localStorage.getItem(KEY);if(r)return JSON.parse(r)}catch(e){}return seed()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){alert('Browser storage is full')}}
+let S=load(),L='en',U=null,V={tab:'home',step:0,type:'student',reg:false,sid:null,msg:'',q:'',wiz:false,fg:0,demo:null,tok:null},TMP={};
+const t=k=>(T[L]&&T[L][k])||T.en[k]||k;
+const R=id=>S.roster.find(r=>r.id==id),P=id=>S.prof[id]||{},dur=c=>/^B\.?(E|Tech)/i.test(c||'')?4:3;
+const hx=async s=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)))].map(b=>b.toString(16).padStart(2,'0')).join('');
+const B=s=>`<span class="pl ${s}">${{submitted:'Submitted',verified:'Verified',needs:'Needs correction'}[s]||s}</span>`;
+const F=(n,l,v='',ty='text',x='')=>`<label>${l}<input class="in" name="${n}" type="${ty}" value="${E(v)}" ${x}></label>`;
+const SEL=(n,l,o,v)=>`<label>${l}<select class="in" name="${n}">${o.map(x=>`<option ${x==v?'selected':''}>${x}</option>`).join('')}</select></label>`;
+const FILE=(k,l,cur)=>`<label>${l}<input class="in" type="file" accept="image/*" onchange="pic(this,'${k}')"></label><img class="th" id="pv_${k}" alt="" ${cur?`src="${cur}"`:'hidden'}>${k=='ph'?'<div id="vr_ph"></div>':''}`;
+const ROW=x=>`<div class="r"><input class="in" name="s" placeholder="Subject" value="${E(x.s)}"><input class="in" name="m" type="number" step="any" placeholder="Marks" value="${E(x.m)}"><input class="in" name="o" type="number" placeholder="100" value="${E(x.o)}"></div>`;
+const SR=a=>`<div id="sub">${a.map(ROW).join('')}</div><button type="button" class="ol" onclick="$('#sub').insertAdjacentHTML('beforeend',ROW({}))">+ Add subject</button>`;
+const fd=e=>{e.preventDefault();return new FormData(e.target)};
+const subs=f=>{const s=f.getAll('s'),m=f.getAll('m'),o=f.getAll('o');return s.map((x,i)=>({s:x,m:+m[i],o:+o[i]||100})).filter((x,i)=>x.s&&m[i]!=='')};
+// Photo limits. Only the minimum size comes from the catalogue; Maatram must confirm the rest.
+const PH={minW:300,minH:400,maxW:4000,maxH:5000,maxMB:2,rMin:.7,rMax:.8,bMin:60,bMax:200,cMin:15};
+function chkPhoto(f,m){const w=m.naturalWidth,h=m.naturalHeight,r=w/h,o=[],a=(n,ok,d)=>o.push([n,ok,d]);
+a('File format',/^image\/(jpeg|png)$/.test(f.type),(f.type.replace('image/','')||'unknown').toUpperCase());
+a('Photo resolution',w>=PH.minW&&h>=PH.minH,w+' × '+h+'; minimum '+PH.minW+' × '+PH.minH);
+a('Maximum dimensions',w<=PH.maxW&&h<=PH.maxH,w+' × '+h+'; maximum '+PH.maxW+' × '+PH.maxH);
+a('Orientation',h>=w,h>=w?'Portrait':'Landscape; the photo must be portrait');
+a('Aspect ratio',r>=PH.rMin&&r<=PH.rMax,r.toFixed(2)+'; accepted '+PH.rMin+' to '+PH.rMax);
+a('File size',f.size<=PH.maxMB*1048576,(f.size/1048576).toFixed(2)+' MB; maximum '+PH.maxMB+' MB');
+const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');x.drawImage(m,0,0,64,64);const d=x.getImageData(0,0,64,64).data,n=d.length/4;let s=0,q=0;
+for(let i=0;i<d.length;i+=4){const l=.299*d[i]+.587*d[i+1]+.114*d[i+2];s+=l;q+=l*l}
+const mean=s/n,sd=Math.sqrt(Math.max(0,q/n-mean*mean));
+a('Brightness',mean>=PH.bMin&&mean<=PH.bMax,Math.round(mean)+' of 255; accepted '+PH.bMin+' to '+PH.bMax);
+a('Contrast',sd>=PH.cMin,Math.round(sd)+'; minimum '+PH.cMin);return o}
+const vrHTML=r=>{const ok=r.every(x=>x[1]);return `<div class="cd"><b>Photo check: ${ok?'Passed':'Failed'}</b>${r.map(x=>`<div class="rw" style="flex-wrap:wrap"><span>${x[0]}: <b>${x[1]?'Pass':'Fail'}</b></span><span class="mu">${E(x[2])}</span></div>`).join('')}${ok?'':'<p class="er">This photo cannot be used. Please upload another one.</p>'}<p class="mu">These checks look at size and quality only. They cannot tell who is in the photo.</p></div>`};
+const tile=(n,l)=>`<div class="cd"><div class="bn">${n}</div><div class="mu">${l}</div></div>`;
+const dt=u=>['10th marksheet','11th marksheet','12th marksheet'].concat(Array.from({length:dur(P(u).course)*2},(_,i)=>'Semester '+(i+1)+' marksheet'));
+const avg=u=>{let a=0,b=0;S.marks.filter(m=>m.sid==u).forEach(m=>m.subs.forEach(s=>{a+=s.m;b+=s.o}));return b?Math.round(a/b*100)+'%':'–'};
+const pend=s=>S.marks.filter(m=>m.sid==s&&m.s=='submitted').length+Object.values(S.docs[s]||{}).filter(d=>d.s=='submitted').length+S.ach.filter(a=>a.sid==s&&a.s=='submitted').length+S.vol.filter(a=>a.sid==s&&a.s=='submitted').length;
+function comp(u){const p=P(u),q=S.par[u]||{},e=S.edu[u]||{},c=[p.name,p.dob,p.mobile,p.email,p.addr,p.photo,(q.father||{}).name,(q.mother||{}).name,e['10th'],e['11th'],e['12th'],(S.links[u]||[]).length];return Math.round(c.filter(Boolean).length/c.length*100)}
+function pic(i,k,cb){const f=i.files[0];if(!f)return;if(!f.type.startsWith('image/')){if(k=='ph'){$('#vr_ph').innerHTML=vrHTML([['File format',false,f.type||'unknown']]);delete TMP.ph;return}TMP[k]='file:'+f.name;cb&&cb();return}
+const r=new FileReader();r.onload=()=>{const m=new Image();m.onload=()=>{if(k=='ph'){const rp=chkPhoto(f,m),v=$('#vr_ph');TMP.phr=rp;if(v)v.innerHTML=vrHTML(rp);if(!rp.every(x=>x[1])){delete TMP.ph;const pp=$('#pv_ph');if(pp)pp.hidden=true;return}}const c=document.createElement('canvas'),s=Math.min(1,260/Math.max(m.width,m.height));c.width=m.width*s;c.height=m.height*s;c.getContext('2d').drawImage(m,0,0,c.width,c.height);TMP[k]=c.toDataURL('image/jpeg',.6);const p=$('#pv_'+k);if(p){p.src=TMP[k];p.hidden=false}cb&&cb()};m.src=r.result};r.readAsDataURL(f)}
+
+function draw(){$('#app').innerHTML=`<div class="hd"><img class="lo" src="${LOGO}" alt="${t('brand')}"><span>${U&&typeof bellBtn=='function'?bellBtn():''}<button class="lg" onclick="L='en';draw()">EN</button><button class="lg" onclick="L='ta';draw()">தமிழ்</button>${U?`<button class="lg" onclick="out()">${t('out')}</button>`:''}</span></div><div class="w">${U&&V.bell?bellV():''}${typeof onHomeNow=='function'&&onHomeNow()?askCard():''}${body()}</div>${tabs()}`;window.scrollTo(0,0)}
+function out(){U=null;V={tab:'home',step:0,type:'student',reg:false,sid:null,msg:'',q:'',wiz:false,fg:0,demo:null,tok:null};draw()}
+function body(){if(!U)return loginV();if(V.sid)return recV(V.sid);if(V.m)return MV(V.m);if(U.role=='staff')return staffHome();if(U.role=='alumni')return alumniV();if(U.role=='volunteer')return volHome();if(!P(U.id).done||V.wiz)return wizV();return{home:homeV,marks:marksV,docs:docsV,act:actV,more:moreV,prof:profV}[V.tab]()}
+const tabs=()=>U&&U.role=='student'&&P(U.id).done&&!V.wiz&&!V.sid?`<div class="tb">${['home','marks','docs','act','more'].map(k=>`<button class="${V.tab==k?'on':''}" onclick="V.tab='${k}';V.m=null;draw()">${t(k)}</button>`).join('')}</div>`:'';
+
+function loginV(){if(V.fg==1)return forgotV();if(V.fg==2)return resetV();if(V.fg==3)return volSignV();if(V.fg==4)return applyV();return `<img class="lo" style="height:96px;margin:6px auto" src="${LOGO}" alt=""><h1>${V.reg?t('reg'):t('login')}</h1><div class="sg">${['student','alumni','office','volunteer'].map(k=>`<button class="${V.type==k?'on':''}" onclick="V.type='${k}';draw()">${t(k)}</button>`).join('')}</div>
+<form class="cd" onsubmit="return auth(event)"><label>${t('id')}<input class="in" name="id" required autocapitalize="characters" value="${E(V.lid||'')}" placeholder="Enter your Maatram ID"></label><label>${t('pw')}<input class="in" name="pw" type="password" required minlength="6"></label>${V.msg?`<p class="er">${E(V.msg)}</p>`:''}<button class="bt">${V.reg?t('reg'):t('login')}</button></form>
+<button class="ol" onclick="V.reg=!V.reg;V.msg='';draw()">${V.reg?t('login'):t('reg')}</button> ${V.reg?'':`<button class="ol" onclick="V.fg=1;V.msg='';V.demo=null;draw()">${t('forgot')}</button> <button class="ol" onclick="V.fg=3;V.msg='';draw()">Become a volunteer</button> <button class="ol" onclick="V.fg=4;V.msg='';V.ap=null;V.mm='';V.aok='';draw()">Apply for admission</button>`}
+<div class="cd mu">Pilot with sample data, saved only in this browser. First choose New registration with a demo ID and a password, then log in. Students: S001, S002. Mentors and alumni: M001, M002. Office team (choose Office): O001 office, A001 admin, C001 and C002 coordinators, R001 student representative. Outside supporters use Become a volunteer, and applicants use Apply for admission.</div>`}
+async function auth(e){e.preventDefault();const f=new FormData(e.target),id=f.get('id').trim().toUpperCase(),h=await hx(f.get('pw')),r=R(id);V.msg='';V.lid=id;
+if(V.reg){if(!r)V.msg='This Maatram ID is not on the list. Please contact the Maatram office.';else if(S.users[id])V.msg='Already registered. Please log in.';
+else{const role=r.kind=='student'?'student':r.kind=='mentor'?'alumni':'staff';S.users[id]={pw:h,role};if(role=='student')S.prof[id]={name:r.name,mobile:r.mobile,college:r.college,course:r.course,year:r.year,done:false};save();return enter(id)}}
+else{const u=S.users[id];if(!u||u.pw!=h)V.msg='Wrong Maatram ID or password.';else{const p=P(id);if(u.role=='student'&&p.year&&p.year+dur(p.course)<=new Date().getFullYear()){u.role='alumni';save()}
+if({student:'student',alumni:'alumni',office:'staff',volunteer:'volunteer'}[V.type]!=u.role)V.msg='This ID is registered as '+u.role+'. Choose the matching login type.';else return enter(id)}}
+draw()}
+const mask=e=>e.replace(/^(.).*(@.*)$/,'$1***$2');
+function forgotV(){return `<h1>${t('forgot')}</h1><p class="mu">Enter your Maatram ID and date of birth. If they match our records, we will email a reset link to the address we have for you.</p><form class="cd" onsubmit="return fgt(event)">${F('id','Maatram ID','','text','required')}${F('dob','Date of birth','','date','required')}<button class="bt">Send reset link</button></form>${V.msg?`<div class="cd">${E(V.msg)}</div>`:''}${V.demo?`<div class="cd mu">Demo only. A real app emails this link to ${E(V.demo.m)}. <button class="bt" onclick="V.fg=2;V.tok='${V.demo.t}';V.msg='';draw()">Open reset link</button></div>`:''}<button class="ol" onclick="V.fg=0;V.msg='';V.demo=null;draw()">${t('back')}</button>`}
+function fgt(e){const f=fd(e),id=f.get('id').trim().toUpperCase(),r=R(id),p=P(id),dob=(r&&r.dob)||p.dob,em=(r&&r.email)||p.email;V.demo=null;S.resets=S.resets||{};
+if(S.users[id]&&dob&&em&&dob==f.get('dob')){const k=uid()+uid()+uid();S.resets[k]={id,exp:Date.now()+18e5};V.demo={t:k,m:mask(em)};save()}
+V.msg='If the details match our records, a reset link has been sent to the email on file. The link works once and expires in 30 minutes.';draw();return false}
+function resetV(){return `<h1>Choose a new password</h1><form class="cd" onsubmit="return rst(event)"><label>New password<input class="in" name="a" type="password" required minlength="6"></label><label>Repeat password<input class="in" name="b" type="password" required minlength="6"></label>${V.msg?`<p class="er">${E(V.msg)}</p>`:''}<button class="bt">Save password</button></form>`}
+async function rst(e){e.preventDefault();const f=new FormData(e.target),x=(S.resets||{})[V.tok];V.msg='';
+if(!x||x.exp<Date.now())V.msg='This link has expired or was already used. Please ask for a new one.';else if(f.get('a')!=f.get('b'))V.msg='The two passwords do not match.';
+else{S.users[x.id].pw=await hx(f.get('a'));delete S.resets[V.tok];save();V.fg=0;V.tok=null;V.demo=null;V.msg='Password changed. Please log in with your new password.';draw();return false}
+draw();return false}
+function enter(id){V.lid='';U={id,role:S.users[id].role,sub:(R(id)||{}).sub||''};V.tab='home';V.sid=null;V.step=0;V.msg='';draw()}
+
+function wizV(){const u=U.id,p=P(u),q=S.par[u]||{},e=S.edu[u]||{},s=V.step,nx=s==5?'Finish':t('next');
+let h=`<div class="pg">${[0,1,2,3,4,5].map(i=>`<i class="${i<=s?'on':''}"></i>`).join('')}</div>`;
+if(s==0)h+=`<h1>Personal information</h1><form class="fm" onsubmit="return wiz(event)">${FILE('ph','Passport-size photo',p.photo)}${F('name','Full name',p.name,'text','required')}${F('dob','Date of birth',p.dob,'date')}${F('mobile','Mobile number',p.mobile,'tel')}${F('email','Email',p.email,'email')}${F('addr','Address',p.addr)}${F('college','College',p.college)}${F('course','Course',p.course)}${F('year','Year of joining',p.year,'number')}<button class="bt">${nx}</button></form>`;
+else if(s==1)h+=`<h1>Parents' information</h1><form class="fm" onsubmit="return wiz(event)">${['father','mother'].map(k=>`<div class="cd"><b>${k=='father'?'Father':'Mother'}</b>${F(k+'n','Name',(q[k]||{}).name)}${F(k+'o','Occupation',(q[k]||{}).occ)}${FILE(k,'Passport-size photo',(q[k]||{}).photo)}</div>`).join('')}${F('phone','Contact number',q.phone,'tel')}${F('guardian','Guardian (if not a parent)',q.guardian)}<button class="bt">${nx}</button></form>`;
+else if(s<5){const st=['10th','11th','12th'][s-2],x=e[st]||{};h+=`<h1>${st} standard</h1><form class="fm" onsubmit="return wiz(event)">${F('school','School name',x.school)}${F('board','Board',x.board)}${F('yr','Year of passing',x.yr,'number')}${st=='11th'?F('pct','Marks or percentage',x.pct):SEL('med','Medium of study',['English','Tamil','Other'],x.med)+'<div class="lb">Subject-wise marks</div>'+SR(x.subs&&x.subs.length?x.subs:[{},{},{}])}<button class="bt">${nx}</button></form>`}
+else{const ms=S.roster.filter(r=>r.kind=='mentor'&&r.college==p.college&&dur(r.course)==dur(p.course)),ch=S.links[u]||[];h+=`<h1>Choose your mentors</h1><p class="mu">Maatram has listed the mentors for ${E(p.college)} (${dur(p.course)==4?'engineering':'arts'}). Select yours. They can see your full record and verify your entries.</p><form class="fm" onsubmit="return wiz(event)">${ms.map(m=>`<label class="cd ck"><input type="checkbox" name="mn" value="${m.id}" ${ch.includes(m.id)?'checked':''}><span><b>${E(m.name)}</b><br><span class="mu">Alumnus · ${E(m.course)}</span></span></label>`).join('')||'<p class="mu">No mentors are listed for your college and stream yet. The Maatram office will add them.</p>'}<button class="bt">${nx}</button></form>`}
+return h+(s>0?`<button class="ol" onclick="V.step--;draw()">${t('back')}</button>`:'')}
+function wiz(e){const f=fd(e),u=U.id,p=S.prof[u],s=V.step;
+if(s==0){Object.assign(p,{name:f.get('name'),dob:f.get('dob'),mobile:f.get('mobile'),email:f.get('email'),addr:f.get('addr'),college:f.get('college'),course:f.get('course'),year:+f.get('year')});if(TMP.ph)p.photo=TMP.ph}
+else if(s==1){const q=S.par[u]=S.par[u]||{};['father','mother'].forEach(k=>{q[k]=Object.assign(q[k]||{},{name:f.get(k+'n'),occ:f.get(k+'o')});if(TMP[k])q[k].photo=TMP[k]});q.phone=f.get('phone');q.guardian=f.get('guardian')}
+else if(s<5){const st=['10th','11th','12th'][s-2],x=(S.edu[u]=S.edu[u]||{})[st]={school:f.get('school'),board:f.get('board'),yr:f.get('yr')};if(st=='11th')x.pct=f.get('pct');else{x.med=f.get('med');x.subs=subs(f);const a=x.subs.reduce((t,i)=>t+i.m,0),b=x.subs.reduce((t,i)=>t+i.o,0);x.pct=b?Math.round(a/b*1000)/10:''}}
+if(s==5){S.links[u]=f.getAll('mn');p.done=true;V.wiz=false;V.step=0;V.tab='home'}else V.step++;
+TMP={};save();draw();return false}
+
+function homeV(){const u=U.id,p=P(u),c=comp(u),ms=(S.links[u]||[]).map(i=>(R(i)||{}).name),dn=Object.values(S.docs[u]||{}).filter(d=>d.s=='verified').length;
+return `<h1>Hi, ${E(p.name)}</h1><p class="mu">${E(p.course)} · ${E(p.college)}</p><div class="cd ac"><b>Profile ${c}% complete</b><div class="bar"><i style="width:${c}%"></i></div></div>
+${S.marks.some(m=>m.sid==u)?'':`<div class="cd rw"><div><span class="pl d">DUE</span> <b>Add your marks</b></div><button class="bt" onclick="V.tab='marks';draw()">${t('add')}</button></div>`}
+<div class="gr">${tile(avg(u),'Average score')}${tile(dn+'/'+dt(u).length,'Documents verified')}${tile(S.ach.filter(a=>a.sid==u).length,'Achievements')}${tile(S.vol.filter(a=>a.sid==u).length,'Volunteering events')}</div>
+<div class="cd"><b>Your mentors</b><p>${ms.map(x=>`<span class="pl k">${E(x)}</span> `).join('')||'<span class="mu">None selected</span>'}</p></div>`}
+function marksV(){const u=U.id,n=dur(P(u).course)*2,l=S.marks.filter(m=>m.sid==u);
+return `<h1>${t('marks')}</h1><form class="cd" onsubmit="return mSave(event)">${SEL('type','Type',['Semester','Internal'])}${SEL('sem','Semester',Array.from({length:n},(_,i)=>i+1))}${F('name','Exam name (for internal marks)','')}${F('gpa','GPA or CGPA','','number','step="any"')}${F('arr','Arrears','','number')}<div class="lb">Subjects</div>${SR([{},{}])}${FILE('pf','Result screenshot')}<button class="bt">${t('sub')}</button></form>`+
+l.map(m=>`<div class="cd"><div class="rw"><b>${m.type} · Sem ${m.sem}${m.name?' · '+E(m.name):''}</b>${B(m.s)}</div><div class="mu">GPA ${E(m.gpa)||'–'} · ${m.subs.map(s=>E(s.s)+' '+s.m+'/'+s.o).join(', ')}</div>${m.note?`<p class="er">${E(m.note)}</p>`:''}${m.s!='verified'?`<button class="ol" onclick="del('marks','${m.id}')">Delete</button>`:''}</div>`).join('')}
+function mSave(e){const f=fd(e);S.marks.push({id:uid(),sid:U.id,type:f.get('type'),sem:f.get('sem'),name:f.get('name'),gpa:f.get('gpa'),arr:f.get('arr'),subs:subs(f),proof:TMP.pf||'',s:'submitted',note:''});TMP={};save();draw();return false}
+function docsV(){const u=U.id,d=S.docs[u]||{};return `<h1>${t('docs')}</h1>`+dt(u).map(k=>{const x=d[k];return `<div class="cd"><div class="rw"><b>${k}</b>${x?B(x.s):'<span class="pl">Missing</span>'}</div>${x&&(x.f||'').startsWith('data:')?`<img class="th" src="${x.f}" alt="">`:x?`<div class="mu">${E((x.f||'').replace('file:',''))}</div>`:''}${x&&x.note?`<p class="er">${E(x.note)}</p>`:''}${!x||x.s=='needs'?`<input class="in" type="file" accept="image/*,.pdf" onchange="pic(this,'d',()=>dUp('${k}'))">`:''}</div>`}).join('')}
+function dUp(k){(S.docs[U.id]=S.docs[U.id]||{})[k]={f:TMP.d,s:'submitted',note:''};TMP={};save();draw()}
+function actV(){const u=U.id;return `<h1>Achievements</h1><form class="cd" onsubmit="return aSave(event)">${F('title','Title','','text','required')}${SEL('cat','Category',['Academic','Sports','Arts','Leadership','Community','Other'])}${F('date','Date',td(),'date')}${F('desc','Short description','')}${FILE('ap','Proof (certificate or photo)')}<button class="bt">${t('add')}</button></form>`+
+S.ach.filter(x=>x.sid==u).map(x=>`<div class="cd"><div class="rw"><b>${E(x.title)}</b>${B(x.s)}</div><div class="mu">${x.cat} · ${x.date}</div>${x.note?`<p class="er">${E(x.note)}</p>`:''}</div>`).join('')+
+`<h1>Volunteering</h1><form class="cd" onsubmit="return vSave(event)">${F('event','Event name','','text','required')}${F('role','Volunteering role','','text','required')}${F('date','Date',td(),'date')}<button class="bt">${t('add')}</button></form>`+
+S.vol.filter(x=>x.sid==u).map(x=>`<div class="cd"><div class="rw"><b>${E(x.event)}</b>${B(x.s)}</div><div class="mu">${E(x.role)} · ${x.date}</div>${x.note?`<p class="er">${E(x.note)}</p>`:''}</div>`).join('')}
+function aSave(e){const f=fd(e);S.ach.push({id:uid(),sid:U.id,title:f.get('title'),cat:f.get('cat'),date:f.get('date'),desc:f.get('desc'),proof:TMP.ap||'',s:'submitted',note:''});TMP={};save();draw();return false}
+function vSave(e){const f=fd(e);S.vol.push({id:uid(),sid:U.id,event:f.get('event'),role:f.get('role'),date:f.get('date'),s:'submitted',note:''});save();draw();return false}
+function del(k,id){S[k]=S[k].filter(x=>x.id!=id);save();draw()}
+function profV(){const p=P(U.id);return `<h1>${t('prof')}</h1><div class="cd">${p.photo?`<img class="th" src="${p.photo}" alt="">`:''}<p><b>${E(p.name)}</b><br>${E(p.course)} · ${E(p.college)}<br>${E(p.mobile)} · ${E(p.email)}</p></div><button class="bt" onclick="V.wiz=true;V.step=0;draw()">Edit my details</button> <button class="ol" onclick="V.wiz=true;V.step=5;draw()">Change mentors</button>`}
+
+function alumniV(){const u=U.id,yr=new Date().getFullYear(),up=(S.upd[u]||{})[yr]||{},ms=Object.keys(S.links).filter(s=>(S.links[s]||[]).includes(u));
+return `${MENU()}<h1>Hi, ${E((R(u)||{}).name)}</h1><form class="cd" onsubmit="return uSave(event)"><b>Yearly update</b>${SEL('sit','Current situation',['Job','Higher studies','Other'],up.sit)}${F('det','Details',up.det)}<button class="bt">${t('save')}</button></form><h2>Your mentees</h2>`+
+(ms.map(s=>`<div class="cd rw"><div><b>${E(P(s).name)}</b><div class="mu">${E(P(s).college)} · ${pend(s)} waiting</div></div><button class="bt" onclick="V.sid='${s}';draw()">Open</button></div>`).join('')||'<p class="mu">No students have selected you yet.</p>')}
+function uSave(e){const f=fd(e),y=new Date().getFullYear();(S.upd[U.id]=S.upd[U.id]||{})[y]={sit:f.get('sit'),det:f.get('det')};save();draw();return false}
+
+function recV(s){const p=P(s),q=S.par[s]||{},e=S.edu[s]||{},d=S.docs[s]||{},rv=(U.role=='staff'&&/^(office|admin)$/.test(U.sub))||(S.links[s]||[]).includes(U.id);
+const rb=(k,a,b,x)=>rv&&x.s=='submitted'?`<div class="rw"><button class="bt" onclick="rev('${k}','${a}','${b}',1)">Approve</button><button class="ol" onclick="rev('${k}','${a}','${b}',0)">Needs correction</button></div>`:'';
+const im=x=>(x||'').startsWith('data:')?`<img class="th" src="${x}" alt="">`:'';
+return `<button class="ol" onclick="V.sid=null;draw()">${t('back')}</button><h1>${E(p.name||NM(s))}</h1>${rv?'<input class="in" id="nt" placeholder="Note for a correction (optional)">':''}
+<div class="cd">${im(p.photo)}<p>${E(p.course)} · ${E(p.college)}<br>Joined ${E(p.year)} · ${E(p.mobile)} · ${E(p.email)}<br>${E(p.addr)}</p></div>
+<div class="cd"><b>Parents</b><p>${['father','mother'].map(k=>q[k]?`${k}: ${E(q[k].name)} (${E(q[k].occ)}) ${im(q[k].photo)}`:'').join('<br>')}<br>${E(q.phone)} ${q.guardian?'· Guardian '+E(q.guardian):''}</p></div>
+<div class="cd"><b>Education</b>${['10th','11th','12th'].map(k=>e[k]?`<p>${k}: ${E(e[k].school)}, ${E(e[k].board)} ${E(e[k].yr)} · ${E(e[k].pct)}%${e[k].med?' · '+E(e[k].med)+' medium':''}${(e[k].subs||[]).length?'<br><span class="mu">'+e[k].subs.map(i=>E(i.s)+' '+i.m+'/'+i.o).join(', ')+'</span>':''}</p>`:'').join('')}</div>
+<h2>Marks</h2>${S.marks.filter(m=>m.sid==s).map(m=>`<div class="cd"><div class="rw"><b>${m.type} · Sem ${m.sem} ${E(m.name)}</b>${B(m.s)}</div><div class="mu">GPA ${E(m.gpa)||'–'} · arrears ${E(m.arr)||0} · ${m.subs.map(i=>E(i.s)+' '+i.m+'/'+i.o).join(', ')}</div>${im(m.proof)}${rb('m',m.id,'',m)}</div>`).join('')||'<p class="mu">None yet.</p>'}
+<h2>Documents</h2>${Object.keys(d).map(k=>`<div class="cd"><div class="rw"><b>${k}</b>${B(d[k].s)}</div>${im(d[k].f)}${rb('d',s,k,d[k])}</div>`).join('')||'<p class="mu">None yet.</p>'}
+<h2>Achievements</h2>${S.ach.filter(a=>a.sid==s).map(a=>`<div class="cd"><div class="rw"><b>${E(a.title)}</b>${B(a.s)}</div><div class="mu">${a.cat} · ${a.date} · ${E(a.desc)}</div>${im(a.proof)}${rb('a',a.id,'',a)}</div>`).join('')||'<p class="mu">None yet.</p>'}
+<h2>Volunteering</h2>${S.vol.filter(a=>a.sid==s).map(a=>`<div class="cd"><div class="rw"><b>${E(a.event)}</b>${B(a.s)}</div><div class="mu">${E(a.role)} · ${a.date}</div>${rb('v',a.id,'',a)}</div>`).join('')||'<p class="mu">None yet.</p>'}`}
+function rev(k,a,b,ok){const n=($('#nt')||{}).value||'',x=k=='m'?S.marks.find(i=>i.id==a):k=='a'?S.ach.find(i=>i.id==a):k=='v'?S.vol.find(i=>i.id==a):S.docs[a][b];if(x){x.s=ok?'verified':'needs';x.note=ok?'':n;x.by=U.id;save();draw()}}
+
+function olist(){const q=V.q.toLowerCase();return S.roster.filter(r=>r.kind=='student'&&(r.name+r.id).toLowerCase().includes(q)).map(r=>`<div class="cd rw"><div><b>${E(r.name)}</b><div class="mu">${r.id} · ${S.users[r.id]?(P(r.id).done?'profile complete':'registered'):'not registered'}</div></div><button class="ol" onclick="V.sid='${r.id}';draw()">Open</button></div>`).join('')||'<p class="mu">No students found.</p>'}
+function officeV(){const pn=[];
+S.marks.filter(m=>m.s=='submitted').forEach(m=>pn.push([m.sid,'Marks · Sem '+m.sem]));
+Object.entries(S.docs).forEach(([s,d])=>Object.entries(d).forEach(([k,x])=>x.s=='submitted'&&pn.push([s,k])));
+S.ach.filter(a=>a.s=='submitted').forEach(a=>pn.push([a.sid,'Achievement · '+a.title]));
+S.vol.filter(a=>a.s=='submitted').forEach(a=>pn.push([a.sid,'Volunteering · '+a.event]));
+return `${MENU()}<h1>Office overview</h1><div class="gr">${tile(S.roster.filter(r=>r.kind=='student').length,'Students on list')}${tile(pn.length,'Waiting for verification')}</div><h2>Pending</h2>`+
+(pn.map(([s,l])=>`<div class="cd rw"><div><b>${E((R(s)||{}).name)}</b><div class="mu">${E(l)} · mentors: ${(S.links[s]||[]).map(i=>E((R(i)||{}).name)).join(', ')||'none'}</div></div><button class="ol" onclick="V.sid='${s}';draw()">Open</button></div>`).join('')||'<p class="mu">Nothing waiting.</p>')+
+`<h2>Students</h2><input class="in" placeholder="Search by name or Maatram ID" oninput="V.q=this.value;$('#ol').innerHTML=olist()"><div id="ol">${olist()}</div>
+<h2>Import list</h2><div class="cd"><p class="mu">Paste one row per person: maatram_id,kind,name,mobile,college,course,year,dob (YYYY-MM-DD),email. Kind is student or mentor.</p><textarea class="in" id="csv" rows="4"></textarea><button class="bt" onclick="imp()">Import</button> <span id="im" class="mu"></span></div><button class="ol" onclick="localStorage.removeItem(KEY);S=seed();out()">Reset demo data</button>`}
+function imp(){let n=0;$('#csv').value.split('\n').forEach(l=>{const c=l.split(',').map(x=>x.trim());if(c.length<3||c[0].toLowerCase()=='maatram_id')return;const r={id:c[0].toUpperCase(),kind:(c[1]||'student').toLowerCase(),name:c[2],mobile:c[3]||'',college:c[4]||'',course:c[5]||'',year:+c[6]||0,dob:c[7]||'',email:c[8]||''},i=S.roster.findIndex(x=>x.id==r.id);if(i<0)S.roster.push(r);else S.roster[i]=r;n++});save();$('#im').textContent=n+' rows imported';$('#ol').innerHTML=olist();$('#csv').value=''}
+draw();
+</script>
+<script>
+/* ===== Maatram modules: availability, support, volunteering, careers, admissions, events ===== */
+const ds=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const NOW=()=>Date.now()+(S.clock||0)*36e5,fmt=x=>new Date(x).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'});
+const NM=id=>(R(id)||{}).name||(S.vprof[id]||{}).name||id;
+const B2=s=>`<span class="pl ${/^(accepted|attended|approved|resolved|selected|shortlisted)$/.test(s)?'verified':/^(declined|rejected)$/.test(s)?'needs':''}">${E(String(s).replace(/_/g,' '))}</span>`;
+const isOff=()=>!!U&&U.role=='staff'&&/^(office|admin)$/.test(U.sub),isAdm=()=>!!U&&U.role=='staff'&&U.sub=='admin';
+const bk=()=>V.m?`<button class="ol" onclick="V.m=null;V.qid=null;V.aid=null;V.mm='';draw()">${t('back')}</button>`:'';
+const keep=()=>{const y=scrollY;draw();scrollTo(0,y)},MM=()=>V.mm?`<p class="er">${E(V.mm)}</p>`:'';
+const KIND={school_visit:'School visit',admissions_support:'Admissions support',bgv:'Background verification',mock_interview:'Mock interview',panel_interview:'Admission panel interview',other:'Other'};
+const BL=[['m','Morning 9–12'],['a','Afternoon 12–4'],['e','Evening 4–7']],DAYS=[6,0,1,2,3,4,5],DN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],BLK=k=>(BL.find(x=>x[0]==k)||[0,''])[1];
+const GRP=id=>{const u=S.users[id],r=R(id);return u?(u.role=='volunteer'?'Volunteer':u.role=='alumni'?'Alumni':'Student'):(r&&r.kind=='mentor'?'Alumni':'Student')};
+
+/* ---- state and demo data ---- */
+function ensure(){const d={avail:{},sess:[],groups:[{id:'g1',name:'Weekend volunteers',m:['S001','S002','S003','S004']}],q:[],qn:0,cats:['Admission','Scholarship','Events','Mentoring','Technical','Other'],rules:[{cat:'Admission',to:'C001'},{cat:'Scholarship',to:'C002'}],cfg:{nudgeH:24,overdueH:48,escH:72,quietD:90,maxMB:2,senior:'C001',reqSubj:'Tamil, English, Mathematics, Science, Social Science'},clock:0,notes:[],opps:[],signups:[],consent:{},vprof:{},vn:0,events:[],seq:0,txc:0,cons:{mailer:{tx:0,seq:0},career:{tx:0,seq:0}},inflight:[],hist:{},cur:{},comp:{'infosys':'Infosys','tata consultancy services':'Tata Consultancy Services','zoho':'Zoho'},alias:{'tcs':'tata consultancy services'},cands:{},cycles:[],apps:[],store:{},up:{}};
+ for(const k in d)if(S[k]===undefined)S[k]=d[k];
+ if(!S.seeded2){seed2();S.seeded2=1;save()}}
+function seed2(){const cols=['Example Engineering College','Sample Arts College','Demo Technical Institute'];
+ [['A001','admin','Admin User'],['C001','coordinator','Coordinator One'],['C002','coordinator','Coordinator Two'],['R001','rep','Student Rep']].forEach(([id,sub,name])=>{if(!R(id))S.roster.push({id,kind:'staff',sub,name,college:'',course:'',year:0})});
+ const o=R('O001');if(o)o.sub='office';
+ ['Kavya','Ravi','Meena','Sanjay','Lakshmi','Vikram','Anitha','Suresh','Divya','Prakash'].forEach((n,i)=>{const id='S'+String(i+3).padStart(3,'0');S.roster.push({id,kind:'student',name:n+' (demo)',mobile:'',college:cols[i%3],course:i%3==1?'B.A. English':'B.E. Mechanical',year:2023+(i%3)});
+  const pat={};[6,0].forEach(d=>BL.forEach(b=>{if((i+d+b[0].charCodeAt(0))%3)pat[d+'-'+b[0]]=1}));S.avail[id]={pat,ov:[]}});
+ const dd=n=>ds(new Date(Date.now()+n*864e5));
+ S.opps.push({id:'o1',kind:'school_visit',title:'School visit, Tiruvallur',mode:'offline',loc:'Tiruvallur',date:dd(14),cap:10,status:'open'},{id:'o2',kind:'mock_interview',title:'Mock interviews for final-year students',mode:'online',loc:'Online',date:dd(21),cap:6,status:'open'},{id:'o3',kind:'panel_interview',title:'Admission panel interviews 2026',mode:'offline',loc:'Chennai',date:'2026-03-15',cap:8,status:'closed'});
+ [['M001',4,'Infosys'],['M002',3,'Zoho'],['S001',2,'']].forEach(([p,h,emp],i)=>{S.signups.push({id:'x'+i,oid:'o3',pid:p,status:'attended',hours:h});S.consent[p]={email:true,post:i!=1,contact:i!=2};S.vprof[p]={employer:emp,dnc:i==1}});
+ S.cycles.push({id:'c25',year:2025,name:'2025 intake',opens:'2025-01-01',closes:'2025-03-31',status:'closed'},{id:'c26',year:2026,name:'2026 intake',opens:'2026-10-01',closes:dd(60),status:'open'});
+ ['selected','selected','selected','selected','selected','rejected','rejected','rejected','shortlisted','submitted'].forEach((s,i)=>S.apps.push({id:'a25'+i,cy:'c25',email:'applicant'+i+'@example.com',name:'Applicant 25-'+(i+1),status:s,reason:/sel|rej/.test(s)?'Demo data':'',marks:[],hist:[],vr:{up:{},q:'resolved'},prep:[],demo:1}));
+ [['Asha','asha@example.com'],['Bala','bala@example.com'],['Charu','charu@example.com']].forEach(([n,e],i)=>S.apps.push({id:'a26'+i,cy:'c26',email:e,name:n+' (demo)',dob:'2008-0'+(i+4)+'-1'+i,mobile:'',college:'',course:'',marks:[{s:'Tamil',m:80+i,o:100},{s:'English',m:70+i,o:100},{s:'Mathematics',m:90-i,o:100},{s:'Science',m:85,o:100}],status:'submitted',reason:'',hist:[{t:Date.now(),who:'applicant',from:'',to:'submitted',reason:''}],prep:[['Photo resolution',i!=1,i!=1?'600 × 800; minimum 300 × 400':'180 × 220; minimum 300 × 400']],vr:{up:{},q:'open'},demo:1}));
+ const sq=(sid,cat,ch,pri,desc,st,ageH,to)=>{const at=Date.now()-ageH*36e5;S.q.push({id:'Q-'+String(++S.qn).padStart(3,'0'),sid,col:(R(sid)||{}).college||'',cat,ch,pri,desc,status:st,to,by:'R001',at,upd:at,hist:[{t:at,who:'R001',kind:'created',from:'',to:'new',note:'Logged via '+ch}],att:'',nud:0,rn:0,esc:false,resAt:st=='resolved'?at+5*36e5:0})};
+ sq('S003','Admission','whatsapp','high','Marksheet upload keeps failing','in_progress',30,'C001');sq('S004','Scholarship','phone','normal','Fee receipt not accepted','assigned',10,'C002');sq('S005','Events','email','low','Date of the boot camp?','resolved',50,'C002');sq('S006','Mentoring','form','normal','Please share my mentor details','waiting_for_student',12,'C001')}
+
+/* ---- events, workers, messages ---- */
+function emit(type,agg,pl,key){if(key&&S.events.some(e=>e.key==key))return false;S.seq++;S.txc++;S.events.push({seq:S.seq,tx:S.txc,type,agg:String(agg),pl:pl||{},at:NOW(),by:U&&U.id,key});return true}
+const vis=()=>{const m=S.inflight.length?Math.min(...S.inflight):Infinity;return S.events.filter(e=>e.tx<m).sort((a,b)=>a.tx-b.tx||a.seq-b.seq)},after=(c,e)=>e.tx>c.tx||(e.tx==c.tx&&e.seq>c.seq);
+function note(to,ch,m,key){if(S.notes.some(n=>n.key==key))return;S.notes.push({id:uid(),to,ch,msg:m,at:NOW(),key})}
+function mailer(e){const p=e.pl,k=e.type+'|'+e.agg;
+ if(e.type=='query.resolved')note(p.sid,'email','Your query "'+p.desc+'" has been resolved.',k+'|'+p.sid);
+ else if(e.type=='query.nudge')note(p.to,'sms','No update for a while on query '+p.id+': "'+p.desc+'". Please update it.',k);
+ else if(e.type=='query.escalated')p.to.forEach(x=>note(x,'email','Query '+p.id+' is overdue and has been escalated: "'+p.desc+'".',k+'|'+x));
+ else if(e.type=='query.student_reminder')note(p.sid,'whatsapp','We are waiting for your reply on your query "'+p.desc+'".',k);
+ else if(e.type=='session.confirmed')p.to.forEach(x=>note(x,'whatsapp','You are invited: '+p.title+' on '+p.when+'. Please accept or decline in the app.',k+'|'+x));
+ else if(e.type=='avail.reminder')note(p.sid,'sms','Please fill in your availability so we can plan '+p.title+'.',k);
+ else if(e.type=='volunteer.attended'&&(S.consent[p.pid]||{}).email)note(p.pid,'email','Thank you for volunteering '+p.hours+' hours at "'+p.title+'" with Maatram Foundation.',k+'|'+p.pid)}
+function runW(){['mailer','career'].forEach(n=>{const c=S.cons[n];if(c.down)return;vis().filter(e=>after(c,e)).forEach(e=>{if(n=='mailer')mailer(e);else if(e.type=='career.added')careerEv(e);c.tx=e.tx;c.seq=e.seq})})}
+const _save=save;save=function(){try{runRem();runW()}catch(x){console.error(x)}_save()};
+
+/* ---- availability planner (MH26-03) ---- */
+const AV=u=>S.avail[u]=S.avail[u]||{pat:{},ov:[]};
+const filled=u=>{const a=S.avail[u];return !!a&&(Object.keys(a.pat).length>0||a.ov.length>0)};
+const freeAt=(u,d,b)=>{const a=S.avail[u];if(!a)return false;const o=(a.ov||[]).find(x=>x.d==d&&x.b==b);if(o)return o.free;return !!(a.pat||{})[new Date(d+'T00:00:00').getDay()+'-'+b]};
+const aud=s=>{const cy=new Date(NOW()).getFullYear(),g=S.groups.find(x=>x.id==s.grp);return S.roster.filter(r=>r.kind=='student'&&(!s.col||r.college==s.col)&&(!s.yr||cy-r.year+1==s.yr)&&(!s.grp||(g&&g.m.includes(r.id)))).map(r=>r.id)};
+const wkD=()=>{const o=[],b=new Date(NOW());for(let i=1;o.length<8&&i<70;i++){const d=new Date(b.getFullYear(),b.getMonth(),b.getDate()+i);if(d.getDay()==6||d.getDay()==0)o.push(ds(d))}return o};
+function availV(){const u=U.id,a=AV(u),inv=S.sess.filter(s=>s.status=='confirmed'&&s.inv&&s.inv[u]);
+ return `${bk()}<h1>Availability</h1><p class="mu">Tap the times you are free. This repeats every week. Weekends come first.</p>
+ <div class="cd"><div style="display:grid;grid-template-columns:auto repeat(3,1fr);gap:6px;align-items:center"><span></span>${BL.map(b=>`<b class="mu" style="font-size:11px">${b[1]}</b>`).join('')}${DAYS.map(d=>`<b>${DN[d]}</b>${BL.map(b=>`<button class="sg-b ${a.pat[d+'-'+b[0]]?'on':''}" aria-pressed="${!!a.pat[d+'-'+b[0]]}" onclick="tgA('${d}-${b[0]}')">${a.pat[d+'-'+b[0]]?'Free':'–'}</button>`).join('')}`).join('')}</div>
+ <div class="rw" style="margin-top:10px"><button class="ol" onclick="wkA()">Weekends only</button><button class="ol" onclick="clA()">Clear</button></div></div>
+ <form class="cd" onsubmit="return ovA(event)"><b>Change a single date</b>${F('d','Date','','date','required')}${SEL('b','Time',BL.map(x=>x[1]))}${SEL('f','Mark as',['Free','Busy'])}<button class="bt">Add change</button>${a.ov.map((o,i)=>`<div class="rw"><span>${o.d} · ${BLK(o.b)} · ${o.free?'Free':'Busy'}</span><button type="button" class="ol" onclick="rmO(${i})">Remove</button></div>`).join('')}</form>
+ <h2>Session invites</h2>${inv.map(s=>`<div class="cd"><b>${E(s.title)}</b><div class="mu">${E(s.when)}</div><div class="rw">${B2(s.inv[u])}${s.inv[u]=='invited'?`<span><button class="bt" onclick="rsp('${s.id}','accepted')">Accept</button> <button class="ol" onclick="rsp('${s.id}','declined')">Decline</button></span>`:''}</div></div>`).join('')||'<p class="mu">No invites yet.</p>'}`}
+function tgA(k){const a=AV(U.id);a.pat[k]?delete a.pat[k]:a.pat[k]=1;save();keep()}
+function wkA(){const a=AV(U.id);a.pat={};[6,0].forEach(d=>BL.forEach(b=>a.pat[d+'-'+b[0]]=1));save();keep()}
+function clA(){AV(U.id).pat={};save();keep()}
+function ovA(e){const f=fd(e),b=BL.find(x=>x[1]==f.get('b'))[0];AV(U.id).ov.push({d:f.get('d'),b,free:f.get('f')=='Free'});save();keep();return false}
+function rmO(i){AV(U.id).ov.splice(i,1);save();keep()}
+function rsp(id,s){const x=S.sess.find(z=>z.id==id);x.inv[U.id]=s;emit('session.response',id+':'+U.id,{s});save();keep()}
+function sessV(){const cols=[...new Set(S.roster.filter(r=>r.kind=='student').map(r=>r.college).filter(Boolean))];
+ return `${bk()}<h1>Sessions</h1><form class="cd" onsubmit="return sNew(event)"><b>Plan a session</b>${SEL('kind','Type',['College visit','Boot camp','Mock training','Online session','Other'])}${F('title','Title','','text','required')}${SEL('col','Institution',['All'].concat(cols))}${SEL('yr','Year',['All',1,2,3,4])}${SEL('grp','Group',['All'].concat(S.groups.map(g=>g.name)))}<button class="bt">Create and show availability</button></form>${MM()}`+(S.sess.map(sCard).join('')||'<p class="mu">No sessions yet.</p>')}
+function sNew(e){const f=fd(e),g=S.groups.find(x=>x.name==f.get('grp')),s={id:uid(),kind:f.get('kind'),title:f.get('title'),col:f.get('col')=='All'?'':f.get('col'),yr:f.get('yr')=='All'?0:+f.get('yr'),grp:g?g.id:'',status:'planned',cand:wkD(),inv:{}};S.sess.push(s);emit('session.created',s.id,{});save();draw();return false}
+function sCard(s){const A=aud(s),N=A.length,fl=A.filter(filled).length;let h=`<div class="cd"><div class="rw"><b>${E(s.title)}</b>${B2(s.status)}</div><div class="mu">${s.kind} · ${s.col?E(s.col):'All institutions'} · ${s.yr?'Year '+s.yr:'All years'}${s.grp?' · '+E(S.groups.find(x=>x.id==s.grp).name):''}</div><div class="mu">${N} students · ${fl} have filled in availability</div>`;
+ if(s.status=='planned'){const cell=(d,b)=>A.filter(u=>freeAt(u,d,b)).length;let best=null;s.cand.forEach(d=>BL.forEach(b=>{const c=cell(d,b[0]);if(!best||c>best.c)best={d,b:b[0],c}}));
+  h+=`<table class="t"><tr><th></th>${BL.map(b=>`<th>${b[1].split(' ')[0]}</th>`).join('')}</tr>${s.cand.map(d=>`<tr><td>${d}<br><span class="mu">${DN[new Date(d+'T00:00:00').getDay()]}</span></td>${BL.map(b=>{const c=cell(d,b[0]);return `<td><button class="hm" style="background:rgba(255,194,14,${N?0.15+0.85*c/N:0.1})" onclick="cfS('${s.id}','${d}','${b[0]}')">${c}/${N}</button></td>`}).join('')}</tr>`).join('')}</table>`;
+  h+=(best&&N?`<p><b>Suggested:</b> ${best.d} · ${BLK(best.b)} · ${best.c} of ${N} free</p><button class="bt" onclick="cfS('${s.id}','${best.d}','${best.b}')">Confirm suggested slot</button> `:'')+`<button class="ol" onclick="remS('${s.id}')">Remind students who have not filled in availability</button> <button class="ol" onclick="canS('${s.id}')">Cancel session</button>`}
+ else if(s.status=='confirmed')h+=`<p><b>Confirmed:</b> ${E(s.when)}</p><table class="t"><tr><th>Student</th><th>Reply</th><th></th></tr>${Object.keys(s.inv).map(u=>`<tr><td>${E(NM(u))}</td><td>${B2(s.inv[u])}</td><td>${s.inv[u]=='accepted'?`<button class="ol" style="height:34px" onclick="attS('${s.id}','${u}')">Mark attended</button>`:''}</td></tr>`).join('')}</table>`;
+ return h+'</div>'}
+function cfS(id,d,b){const s=S.sess.find(x=>x.id==id);s.status='confirmed';s.slot={d,b};s.when=d+' · '+BLK(b);s.inv={};aud(s).forEach(u=>s.inv[u]='invited');emit('session.confirmed',id,{title:s.title,when:s.when,to:Object.keys(s.inv)});save();draw()}
+function remS(id){const s=S.sess.find(x=>x.id==id);let n=0;aud(s).filter(u=>!filled(u)).forEach(u=>{if(emit('avail.reminder',id+':'+u,{sid:u,title:s.title},'rem|'+id+'|'+u))n++});V.mm=n+' reminders queued (students already reminded are skipped).';save();draw()}
+function canS(id){S.sess.find(x=>x.id==id).status='cancelled';emit('session.cancelled',id,{});save();draw()}
+function attS(id,u){S.sess.find(x=>x.id==id).inv[u]='attended';emit('session.attended',id+':'+u,{});save();draw()}
+
+/* ---- support and follow-up (MH26-04) ---- */
+const QS={new:'New',assigned:'Assigned',in_progress:'In progress',waiting_for_student:'Waiting for student',resolved:'Resolved',closed:'Closed'};
+const qopen=q=>!/^(resolved|closed)$/.test(q.status),qage=q=>(NOW()-q.upd)/36e5,qod=q=>qopen(q)&&qage(q)>=S.cfg.overdueH;
+function qh(q,kind,from,to,n,who,keep0){q.hist.push({t:NOW(),who:who||(U?U.id:'system'),kind,from:from||'',to:to||'',note:n||''});if(!keep0){q.upd=NOW();q.esc=false}}
+function qAuto(c){const r=S.rules.find(x=>x.cat==c);if(r)return r.to;const co=S.roster.filter(x=>x.sub=='coordinator').map(x=>x.id),ld=id=>S.q.filter(z=>z.to==id&&qopen(z)).length;return co.sort((a,b)=>ld(a)-ld(b))[0]||''}
+function qMake(sid,cat,ch,pri,desc,att,by){const q={id:'Q-'+String(++S.qn).padStart(3,'0'),sid,col:(R(sid)||{}).college||'',cat,ch,pri,desc,status:'new',to:'',by,at:NOW(),upd:NOW(),hist:[],att:att||'',nud:0,rn:0,esc:false,resAt:0};qh(q,'created','','new','Logged via '+ch,by);const to=qAuto(cat);if(to){q.to=to;q.status='assigned';qh(q,'assignment','',to,'Assigned by rule or workload','system')}S.q.push(q);emit('query.created',q.id,{sid});return q}
+function runRem(){S.q.forEach(q=>{if(!qopen(q))return;const a=qage(q);
+ if(q.status=='waiting_for_student'){if(a>=S.cfg.nudgeH&&q.rn!=q.upd){q.rn=q.upd;emit('query.student_reminder',q.id+'|'+q.upd,{sid:q.sid,desc:q.desc});qh(q,'reminder','','','Reminder sent to the student','system',1)}}
+ else if(a>=S.cfg.nudgeH&&q.nud!=q.upd&&q.to){q.nud=q.upd;emit('query.nudge',q.id+'|'+q.upd,{to:q.to,id:q.id,desc:q.desc});qh(q,'reminder','','','Coordinator nudged: no update','system',1)}
+ if(a>=S.cfg.escH&&!q.esc){q.esc=true;emit('query.escalated',q.id,{id:q.id,desc:q.desc,to:[...new Set([S.cfg.senior,'A001'])]});qh(q,'escalation','','','Escalated to a senior coordinator and the admin','system',1)}})}
+const qvis=()=>S.q.filter(q=>isOff()?true:(U.role=='staff'&&U.sub=='coordinator')?q.to==U.id:(U.role=='staff'&&U.sub=='rep')?q.by==U.id:q.sid==U.id);
+const qForm=()=>`<form class="cd" onsubmit="return qNew(event)"><b>Log a query</b><label>Student<input class="in" name="sid" list="stl" required placeholder="Maatram ID"><datalist id="stl">${S.roster.filter(r=>r.kind=='student').map(r=>`<option value="${r.id}">${E(r.name)}</option>`).join('')}</datalist></label>${SEL('cat','Category',S.cats)}${SEL('ch','Channel',['WhatsApp','Phone','Email','Form','In person','Other'])}${SEL('pri','Priority',['Normal','Low','High','Urgent'])}<label>Short description<textarea class="in" name="desc" rows="2" required></textarea></label>${FILE('qa','Attachment (screenshot or document)')}${MM()}<button class="bt">Log query</button></form>`;
+function qsV(){if(V.qid)return qdV(V.qid);const f=V.qf||(V.qf={q:'',cat:'',st:'',co:'',d:''}),all=S.q,op=all.filter(qopen),cos=S.roster.filter(r=>r.sub=='coordinator'||r.sub=='admin'),res=all.filter(q=>q.resAt);
+ const dash=isOff()?`<div class="gr">${tile(op.length,'Open queries')}${tile(op.filter(qod).length,'Overdue')}${tile(res.length?Math.round(res.reduce((s,q)=>s+(q.resAt-q.at)/36e5,0)/res.length*10)/10+' h':'–','Average time to resolve')}${tile(all.length,'All queries')}</div><div class="cd"><b>Open per coordinator</b>${cos.map(c=>`<div class="rw"><span>${E(c.name)}</span><b>${op.filter(q=>q.to==c.id).length}</b></div>`).join('')}<b style="display:block;margin-top:8px">Most common categories</b>${S.cats.map(c=>[c,all.filter(q=>q.cat==c).length]).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<div class="rw"><span>${c}</span><span class="mu">${n}</span></div><div class="bar"><i style="width:${all.length?n/all.length*100:0}%"></i></div>`).join('')}</div>`:'';
+ const canLog=U.role=='staff'&&/^(office|admin|rep)$/.test(U.sub),op2=(a,sel)=>a.map(x=>`<option value="${x[0]}" ${x[0]==sel?'selected':''}>${x[1]}</option>`).join('');
+ return `${bk()}<h1>Queries</h1>${dash}${canLog?qForm():''}<div class="cd"><b>Find a query</b><input class="in" placeholder="Search student, ID or text" value="${E(f.q)}" oninput="V.qf.q=this.value;ql()"><div class="r" style="margin-top:8px"><select class="in" onchange="V.qf.cat=this.value;ql()"><option value="">All categories</option>${op2(S.cats.map(c=>[c,c]),f.cat)}</select><select class="in" onchange="V.qf.st=this.value;ql()"><option value="">All statuses</option>${op2(Object.keys(QS).map(k=>[k,QS[k]]),f.st)}</select></div><div class="r"><select class="in" onchange="V.qf.co=this.value;ql()"><option value="">All coordinators</option>${op2(cos.map(c=>[c.id,c.name]),f.co)}</select><input class="in" type="date" value="${f.d}" onchange="V.qf.d=this.value;ql()" aria-label="From date"></div></div><div id="ql">${qlist()}</div>`}
+function qlist(){const f=V.qf,t0=f.q.toLowerCase(),from=f.d?new Date(f.d+'T00:00:00').getTime():0;return qvis().filter(q=>(!f.cat||q.cat==f.cat)&&(!f.st||q.status==f.st)&&(!f.co||q.to==f.co)&&q.at>=from&&(q.id+' '+NM(q.sid)+' '+q.sid+' '+q.desc).toLowerCase().includes(t0)).sort((a,b)=>b.upd-a.upd).map(q=>`<div class="cd rw"><div><b>${q.id} · ${E(NM(q.sid))}</b><div class="mu">${q.cat} · ${q.ch} · ${q.pri}</div><div>${E(q.desc.slice(0,70))}</div><div class="mu">${q.to?'With '+E(NM(q.to)):'Unassigned'} · updated ${fmt(q.upd)}</div></div><div style="text-align:right">${B2(q.status)}${qod(q)?' <span class="pl needs">Overdue</span>':''}${q.esc?' <span class="pl needs">Escalated</span>':''}<br><button class="ol" style="height:36px" onclick="V.qid='${q.id}';draw()">Open</button></div></div>`).join('')||'<p class="mu">No queries found.</p>'}
+const ql=()=>{$('#ql').innerHTML=qlist()};
+function qNew(e){const f=fd(e),sid=f.get('sid').trim().toUpperCase(),r=R(sid);if(!r||r.kind!='student'){V.mm='That Maatram ID is not a student on the list.';keep();return false}V.mm='';qMake(sid,f.get('cat'),f.get('ch').toLowerCase().replace(' ','_'),f.get('pri').toLowerCase(),f.get('desc'),TMP.qa,U.id);TMP={};save();draw();return false}
+function qdV(id){const q=S.q.find(x=>x.id==id),can=isOff()||(U.role=='staff'&&U.sub=='coordinator'&&q.to==U.id);
+ return `<button class="ol" onclick="V.qid=null;draw()">${t('back')}</button><h1>${q.id}</h1><div class="cd"><div class="rw"><b>${E(NM(q.sid))}</b>${B2(q.status)}</div><div class="mu">${q.col?E(q.col)+' · ':''}${q.cat} · ${q.ch} · ${q.pri}</div><p>${E(q.desc)}</p>${/^data:/.test(q.att||'')?`<img class="th" src="${q.att}" alt="">`:q.att?`<div class="mu">${E(q.att.replace('file:',''))}</div>`:''}<div class="mu">${q.to?'Assigned to '+E(NM(q.to)):'Unassigned'}</div></div>
+ ${can?`<form class="cd" onsubmit="return qUpd(event,'${q.id}')"><b>Update</b>${SEL('st','Status',Object.keys(QS).map(k=>QS[k]),QS[q.status])}${F('note','Note','')}<button class="bt">Save update</button></form>`:''}
+ ${isOff()?`<form class="cd" onsubmit="return qAs(event,'${q.id}')"><b>Reassign</b>${SEL('to','Coordinator',S.roster.filter(r=>r.sub=='coordinator'||r.sub=='admin').map(r=>r.id+' '+r.name))}<button class="ol">Reassign</button></form>`:''}
+ ${U.role=='student'&&q.status=='waiting_for_student'?`<button class="bt" onclick="qRep('${q.id}')">I have replied</button>`:''}
+ <h2>History</h2>${q.hist.map(h=>`<div class="cd"><div class="mu">${fmt(h.t)} · ${E(NM(h.who))} · ${h.kind}</div>${h.from||h.to?`<div>${E(QS[h.from]||h.from)} → ${E(QS[h.to]||h.to)}</div>`:''}${h.note?`<div>${E(h.note)}</div>`:''}</div>`).join('')}`}
+function qUpd(e,id){const f=fd(e),q=S.q.find(x=>x.id==id),st=Object.keys(QS).find(k=>QS[k]==f.get('st')),n=f.get('note');
+ if(st!=q.status){const old=q.status;q.status=st;qh(q,'status',old,st,n);q.resAt=st=='resolved'?NOW():0;if(st=='resolved')emit('query.resolved',q.id,{sid:q.sid,desc:q.desc})}else if(n)qh(q,'note','','',n);
+ save();draw();return false}
+function qAs(e,id){const f=fd(e),q=S.q.find(x=>x.id==id),to=f.get('to').split(' ')[0];if(to!=q.to){const old=q.to;q.to=to;if(q.status=='new')q.status='assigned';qh(q,'assignment',old,to,'Reassigned');emit('query.assigned',q.id,{to})}save();draw();return false}
+function qRep(id){const q=S.q.find(x=>x.id==id);q.status='in_progress';qh(q,'status','waiting_for_student','in_progress','Student replied');save();keep()}
+function helpV(){const mine=S.q.filter(q=>q.sid==U.id);return `${bk()}<h1>Ask for help</h1><form class="cd" onsubmit="return hNew(event)">${SEL('cat','What is it about?',S.cats)}<label>Describe it<textarea class="in" name="desc" rows="3" required></textarea></label>${FILE('qa','Attachment (optional)')}<button class="bt">Send</button></form>`+mine.map(q=>`<div class="cd"><div class="rw"><b>${q.id}</b>${B2(q.status)}</div><div>${E(q.desc)}</div>${q.status=='waiting_for_student'?`<button class="bt" onclick="qRep('${q.id}')">I have replied</button>`:''}</div>`).join('')}
+function hNew(e){const f=fd(e);qMake(U.id,f.get('cat'),'form','normal',f.get('desc'),TMP.qa,U.id);TMP={};save();draw();return false}
+function msgsV(){const m=S.notes.filter(n=>n.to==U.id).reverse();return `${bk()}<h1>Messages</h1>`+(m.map(n=>`<div class="cd"><div class="mu">${n.ch} · ${fmt(n.at)}</div>${E(n.msg)}</div>`).join('')||'<p class="mu">No messages yet.</p>')}
+
+/* ---- volunteering portal (MH26-02) ---- */
+function pstat(){const m={};S.signups.filter(x=>x.status=='attended').forEach(x=>{const o=S.opps.find(z=>z.id==x.oid)||{},p=m[x.pid]=m[x.pid]||{h:0,e:0,last:''};p.h+=+x.hours||0;p.e++;if((o.date||'')>p.last)p.last=o.date||''});return m}
+function volV(){const u=U.id,vp=S.vprof[u]=S.vprof[u]||{employer:'',dnc:false},c=S.consent[u]=S.consent[u]||{},mine=S.signups.filter(x=>x.pid==u);
+ return `${bk()}<h1>Volunteering</h1><h2>Opportunities</h2>`+(S.opps.filter(o=>o.status=='open').map(o=>{const s=mine.find(x=>x.oid==o.id),n=S.signups.filter(x=>x.oid==o.id&&/approved|attended/.test(x.status)).length;return `<div class="cd"><div class="rw"><b>${E(o.title)}</b><span class="pl">${KIND[o.kind]}</span></div><div class="mu">${o.mode} · ${E(o.loc)} · ${o.date} · ${Math.max(0,o.cap-n)} places left</div>${s?B2(s.status):`<button class="bt" onclick="subOp('${o.id}')">Subscribe</button>`}</div>`}).join('')||'<p class="mu">No open opportunities.</p>')+
+ '<h2>My volunteering</h2>'+(mine.map(x=>{const o=S.opps.find(z=>z.id==x.oid)||{title:'Event'};return `<div class="cd"><div class="rw"><b>${E(o.title)}</b>${B2(x.status)}</div>${x.status=='attended'?`<p>Thank you for ${x.hours} hours.</p>${c.post?`<textarea class="in" rows="3" readonly>I gave ${x.hours} hours as a volunteer at "${E(o.title)}" with Maatram Foundation. #Maatram</textarea><a class="bt" style="display:flex;align-items:center;justify-content:center;text-decoration:none" target="_blank" rel="noopener" href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(location.href.split('#')[0])}">Share on LinkedIn</a>`:'<p class="mu">Tick the LinkedIn box below if you want a ready-to-share post.</p>'}`:''}</div>`}).join('')||'<p class="mu">Nothing yet.</p>')+
+ `<form class="cd" onsubmit="return conS(event)"><b>My details and permissions</b>${F('emp','Employer organisation',vp.employer||'')}<label class="ck"><input type="checkbox" name="ce" ${c.email?'checked':''}><span>Send me a thank-you email</span></label><label class="ck"><input type="checkbox" name="cp" ${c.post?'checked':''}><span>Offer me a ready-to-share LinkedIn post</span></label><label class="ck"><input type="checkbox" name="cc" ${c.contact?'checked':''}><span>You may contact me for panel and mock interviews</span></label><label class="ck"><input type="checkbox" name="dn" ${vp.dnc?'checked':''}><span>Do not contact me</span></label><p class="mu">Nothing is sent or posted without your permission. Your details are used only for volunteering with Maatram.</p><button class="bt">Save</button></form>`}
+function conS(e){const f=fd(e),u=U.id;S.consent[u]={email:!!f.get('ce'),post:!!f.get('cp'),contact:!!f.get('cc')};const v=S.vprof[u]=S.vprof[u]||{};v.employer=f.get('emp');v.dnc=!!f.get('dn');emit('volunteer.consent',u,{});save();keep();return false}
+function subOp(id){if(S.signups.some(x=>x.oid==id&&x.pid==U.id))return;const o=S.opps.find(x=>x.id==id);if(S.signups.filter(x=>x.oid==id&&/approved|attended/.test(x.status)).length>=o.cap)return;S.signups.push({id:uid(),oid:id,pid:U.id,status:'pending',hours:0});emit('volunteer.signup',id+':'+U.id,{});save();keep()}
+function volSignV(){return `<h1>Become a volunteer</h1><form class="cd" onsubmit="return vsU(event)">${F('name','Your name','','text','required')}${F('email','Email','','email','required')}${F('emp','Employer organisation (optional)','')}<label>Password<input class="in" name="pw" type="password" required minlength="6"></label><label class="ck"><input type="checkbox" name="ce"><span>Send me a thank-you email</span></label><label class="ck"><input type="checkbox" name="cp"><span>Offer me a ready-to-share LinkedIn post</span></label><label class="ck"><input type="checkbox" name="cc"><span>You may contact me for panel and mock interviews</span></label><button class="bt">Create my volunteer account</button></form><p class="mu">Your details are used only for volunteering with Maatram. Nothing is sent or posted unless you tick it.</p><button class="ol" onclick="V.fg=0;V.msg='';draw()">${t('back')}</button>`}
+async function vsU(e){e.preventDefault();const f=new FormData(e.target),id='V'+String(++S.vn).padStart(3,'0');S.users[id]={pw:await hx(f.get('pw')),role:'volunteer'};S.vprof[id]={name:f.get('name'),email:f.get('email'),employer:f.get('emp'),dnc:false};S.consent[id]={email:!!f.get('ce'),post:!!f.get('cp'),contact:!!f.get('cc')};emit('volunteer.registered',id,{});save();V.fg=0;V.msg='Your volunteer ID is '+id+'. Please log in with it.';draw();return false}
+function volsV(){const ps=pstat(),ids=Object.keys(ps),quiet=ids.filter(p=>ps[p].last&&(NOW()-new Date(ps[p].last+'T00:00:00').getTime())/864e5>=S.cfg.quietD),pend=S.signups.filter(x=>x.status=='pending'),appr=S.signups.filter(x=>x.status=='approved'),nmO=x=>(S.opps.find(o=>o.id==x.oid)||{}).title;
+ const emp={};ids.forEach(p=>{const e=(S.vprof[p]||{}).employer;if(e){const o=emp[e]=emp[e]||{n:0,h:0};o.n++;o.h+=ps[p].h}});
+ const pm=[...new Set(S.signups.filter(x=>/approved|attended/.test(x.status)&&/mock|panel/.test((S.opps.find(o=>o.id==x.oid)||{}).kind||'')).map(x=>x.pid))],ok=pm.filter(p=>(S.consent[p]||{}).contact&&!(S.vprof[p]||{}).dnc),no=pm.filter(p=>!ok.includes(p));
+ return `${bk()}<h1>Volunteering</h1><form class="cd" onsubmit="return oNew(event)"><b>New opportunity</b>${SEL('kind','Type',Object.keys(KIND).map(k=>KIND[k]))}${F('title','Title','','text','required')}${SEL('mode','Online or offline',['Offline','Online'])}${F('loc','Place','')}${F('date','Date','','date','required')}${F('cap','Places','10','number','required min="1"')}<button class="bt">Add opportunity</button></form>
+ <div class="cd"><b>Sign-ups to review</b>${pend.map(x=>`<div class="rw"><span>${E(NM(x.pid))} · ${GRP(x.pid)}<br><span class="mu">${E(nmO(x))}</span></span><span><button class="bt" style="height:38px" onclick="apS('${x.id}',1)">Approve</button> <button class="ol" style="height:38px" onclick="apS('${x.id}',0)">Reject</button></span></div>`).join('')||'<p class="mu">Nothing waiting.</p>'}</div>
+ <div class="cd"><b>After the event: record hours</b>${appr.map(x=>`<form class="rw" onsubmit="return atS(event,'${x.id}')"><span>${E(NM(x.pid))}<br><span class="mu">${E(nmO(x))}</span></span><span><input class="in" style="width:80px" name="h" type="number" step="any" min="0" required placeholder="Hours"> <button class="bt" style="height:38px">Attended</button></span></form>`).join('')||'<p class="mu">No approved sign-ups.</p>'}</div>
+ <h2>Leaderboard</h2><div class="cd"><table class="t"><tr><th>#</th><th>Name</th><th>Events</th><th>Hours</th></tr>${ids.slice().sort((a,b)=>ps[b].h-ps[a].h||ps[b].e-ps[a].e).map((p,i)=>`<tr><td>${i+1}</td><td>${E(NM(p))}<br><span class="mu">${GRP(p)}</span></td><td>${ps[p].e}</td><td>${ps[p].h}</td></tr>`).join('')}</table><p class="mu">Ranked by hours, then events. The catalogue does not define points, so this rule is a placeholder.</p></div>
+ <h2>Reports</h2><div class="cd"><b>Hours and events by group</b><table class="t"><tr><th>Group</th><th>People</th><th>Events</th><th>Hours</th></tr>${['Student','Alumni','Volunteer'].map(g=>{const l=ids.filter(p=>GRP(p)==g);return `<tr><td>${g}</td><td>${l.length}</td><td>${l.reduce((s,p)=>s+ps[p].e,0)}</td><td>${l.reduce((s,p)=>s+ps[p].h,0)}</td></tr>`}).join('')}</table></div>
+ <div class="cd"><b>Going quiet (no event for ${S.cfg.quietD} days)</b>${quiet.map(p=>`<div class="rw"><span>${E(NM(p))} · ${GRP(p)}</span><span class="mu">last ${ps[p].last}</span></div>`).join('')||'<p class="mu">Nobody.</p>'}</div>
+ <div class="cd"><b>Panel and mock-interview volunteers</b><div class="mu">Available to call</div>${ok.map(p=>`<div>${E(NM(p))}</div>`).join('')||'<p class="mu">None.</p>'}<div class="mu" style="margin-top:8px">Do not contact</div>${no.map(p=>`<div>${E(NM(p))}</div>`).join('')||'<p class="mu">None.</p>'}</div>
+ <div class="cd"><b>Hours by employer</b><textarea class="in" rows="4" readonly>${E(Object.keys(emp).map(e=>e+': '+emp[e].n+' volunteer(s), '+emp[e].h+' hours').join('\n')||'No employers recorded yet.')}</textarea><p class="mu">Copy a line to share with that organisation.</p></div>`}
+function oNew(e){const f=fd(e),k=Object.keys(KIND).find(x=>KIND[x]==f.get('kind'));S.opps.push({id:uid(),kind:k,title:f.get('title'),mode:f.get('mode').toLowerCase(),loc:f.get('loc'),date:f.get('date'),cap:+f.get('cap'),status:'open'});emit('opportunity.created',S.opps[S.opps.length-1].id,{});save();draw();return false}
+function apS(id,ok){const x=S.signups.find(z=>z.id==id);x.status=ok?'approved':'rejected';emit('volunteer.'+(ok?'approved':'rejected'),id,{pid:x.pid});save();keep()}
+function atS(e,id){const f=fd(e),x=S.signups.find(z=>z.id==id),o=S.opps.find(z=>z.id==x.oid);x.status='attended';x.hours=+f.get('h');emit('volunteer.attended',id,{pid:x.pid,hours:x.hours,title:o.title});save();keep();return false}
+
+/* ---- alumni careers (MH26-05) ---- */
+const ck=n=>String(n).toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim().replace(/( (private|pvt|limited|ltd|llp|inc|corp|corporation|co))+$/,'');
+const coK=n=>{const k=ck(n);return S.alias[k]||k},coName=n=>S.comp[coK(n)]||null;
+const curOf=l=>{const o=l.filter(x=>!x.end).sort((a,b)=>(b.start||'').localeCompare(a.start||'')||b.seq-a.seq)[0];return o?{title:o.title,co:o.co,source:o.source,start:o.start,key:coK(o.co),name:coName(o.co)||o.co}:null};
+function careerEv(e){const p=e.pl,l=S.hist[p.aid]=S.hist[p.aid]||[];if(l.some(x=>x.seq==e.seq))return;l.push(Object.assign({seq:e.seq},p));S.cur[p.aid]=curOf(l);if(!coName(p.co)){const k=ck(p.co),c=S.cands[k]=S.cands[k]||{ex:p.co,n:0};c.n++}}
+const rebuildCur=()=>{S.cur={};Object.keys(S.hist).forEach(a=>S.cur[a]=curOf(S.hist[a]))};
+function carV(){const u=U.id,h=(S.hist[u]||[]).slice().sort((a,b)=>(b.start||'').localeCompare(a.start||'')),c=S.cur[u];
+ return `${bk()}<h1>My career</h1>${c?`<div class="cd ac"><b>Current</b><div>${E(c.title)} at ${E(c.name)}</div><div style="font-size:13px">Source: ${E(c.source)}</div></div>`:'<p class="mu">No current job recorded.</p>'}<form class="cd" onsubmit="return carS(event)">${F('co','Company','','text','required')}${F('ti','Job title','')}${F('st','Start date','','date','required')}${F('en','End date (leave empty if current)','','date')}${SEL('src','Source',['Self-reported','Referral','Placement'])}<button class="bt">Add to my history</button></form><h2>History</h2>`+(h.map(x=>`<div class="cd"><b>${E(x.title)}</b><div>${E(x.co)}</div><div class="mu">${x.start} to ${x.end||'now'} · ${E(x.source)}</div></div>`).join('')||'<p class="mu">Nothing yet.</p>')}
+function carS(e){const f=fd(e);emit('career.added',U.id+':'+uid(),{aid:U.id,co:f.get('co'),title:f.get('ti'),start:f.get('st'),end:f.get('en'),source:f.get('src')});save();draw();return false}
+function chits(){const q=V.cq||'';if(!q)return '<p class="mu">Type a company name.</p>';const k=coK(q),hits=Object.keys(S.cur).filter(a=>S.cur[a]&&S.cur[a].key==k);return `<p class="mu">Matched as: ${E(S.comp[k]||ck(q)+' (not a known company)')}</p>`+(hits.map(a=>`<div class="cd">${E(NM(a))}<div class="mu">${E(S.cur[a].title)} · ${E(S.cur[a].co)} · ${E(S.cur[a].source)}</div></div>`).join('')||'<p class="mu">No alumni found.</p>')}
+function carsV(){const cs=Object.keys(S.cands),all=Object.keys(S.comp);return `${bk()}<h1>Alumni careers</h1><div class="cd"><b>Which alumni work at a company?</b><input class="in" placeholder="Type a company name" value="${E(V.cq||'')}" oninput="V.cq=this.value;$('#ch').innerHTML=chits()"><div id="ch">${chits()}</div></div>
+ <div class="cd"><b>Company names to confirm</b>${cs.map((k,i)=>`<div class="cd"><div>${E(S.cands[k].ex)} <span class="mu">(seen ${S.cands[k].n} times, key "${E(k)}")</span></div><div class="rw"><button class="ol" style="height:36px" onclick="coNew(${i})">Create as a new company</button></div><div class="rw"><select class="in" id="mg${i}">${all.map(x=>`<option value="${E(x)}">${E(S.comp[x])}</option>`).join('')}</select><button class="ol" style="height:36px" onclick="coMg(${i})">Merge</button></div></div>`).join('')||'<p class="mu">Nothing to confirm.</p>'}</div>
+ <div class="cd"><b>How names are matched</b><ol><li>Lower case, with punctuation turned into spaces.</li><li>One space between words.</li><li>Endings such as pvt, private, ltd, limited, inc, llp, corp, corporation and co are removed.</li><li>The result is looked up in the list of known spellings. Anything unknown waits here for a person to confirm.</li></ol></div>`}
+function coNew(i){const k=Object.keys(S.cands)[i];S.comp[k]=S.cands[k].ex;delete S.cands[k];rebuildCur();save();draw()}
+function coMg(i){const k=Object.keys(S.cands)[i];S.alias[k]=$('#mg'+i).value;delete S.cands[k];rebuildCur();save();draw()}
+
+/* ---- smart uploads (MH26-05) ---- */
+function scaleImg(f,cb){const r=new FileReader();r.onload=()=>{const m=new Image();m.onload=()=>{const c=document.createElement('canvas'),s=Math.min(1,320/Math.max(m.width,m.height));c.width=m.width*s;c.height=m.height*s;c.getContext('2d').drawImage(m,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.6))};m.onerror=()=>cb('file:'+f.name);m.src=r.result};r.readAsDataURL(f)}
+function smartUp(f,cb){if(!f)return;const k=uid()+uid(),L=S.up[k]={exp:NOW()+3e5,types:['image/jpeg','image/png','application/pdf'],max:S.cfg.maxMB*1048576},no=why=>{delete S.up[k];cb({ok:false,why})};
+ if(L.exp<NOW())return no('The upload link expired');
+ if(!L.types.includes(f.type))return no('File type not allowed: '+(f.type||'unknown')+'. Use JPEG, PNG or PDF.');
+ if(f.size>L.max)return no('File is too large: '+(f.size/1048576).toFixed(1)+' MB. The limit is '+S.cfg.maxMB+' MB.');
+ const done=v=>{S.store['obj/'+k]=v;delete S.up[k];save();cb({ok:true,key:'obj/'+k})};f.type.startsWith('image/')?scaleImg(f,done):done('file:'+f.name)}
+const suT=f=>smartUp(f,r=>{$('#su').innerHTML=r.ok?'Uploaded and stored as '+E(r.key)+'.':'<span class="er">Rejected: '+E(r.why)+'</span>'});
+
+/* ---- admissions (MH26-05) with document checks (MH26-01) ---- */
+const openCy=()=>S.cycles.find(c=>c.status=='open'&&NOW()<=new Date(c.closes+'T23:59:59').getTime());
+function vrChecks(a){const c=[],req=S.cfg.reqSubj.split(',').map(x=>x.trim()).filter(Boolean),up=(a.vr||{}).up||{};
+ (a.marks||[]).forEach(m=>{const u=up[m.s];c.push([m.s+' marks',u===undefined||u===''?'review':(+u==m.m?'match':'mismatch'),'Entered: '+m.m+(u===undefined||u===''?'; marksheet value not read yet':', Uploaded: '+u)]);if(m.m>m.o)c.push([m.s+' consistency','fail','Marks '+m.m+' are above the maximum '+m.o])});
+ const have=(a.marks||[]).map(m=>m.s.toLowerCase()),miss=req.filter(r=>!have.includes(r.toLowerCase()));
+ c.push(['Mark sheet completeness',miss.length?'fail':'pass',miss.length?'Missing: '+miss.join(', '):'All required subjects present']);
+ (a.prep||[]).forEach(p=>c.push([p[0],p[1]?'pass':'fail',p[2]]));return c}
+const needsRev=a=>vrChecks(a).some(x=>!/^(pass|match)$/.test(x[1]));
+function applyV(){if(V.aok)return `<h1>Application received</h1><div class="cd"><p>${E(V.aok)}</p></div><button class="ol" onclick="V.aok='';V.fg=0;draw()">${t('back')}</button>`;
+ const cy=openCy(),a=V.ap||{},m=a.marks&&a.marks.length?a.marks:[{},{},{},{}];
+ return `<h1>Apply for admission</h1>${cy?`<p class="mu">${E(cy.name)} is open until ${cy.closes}.</p>`:'<p class="er">Applications are closed.</p>'}<form class="cd" onsubmit="return apLoad(event)"><b>Continue a saved draft</b>${F('em','Email you used','','email','required')}<button class="ol">Load my draft</button></form>
+ <form class="cd" onsubmit="return apSave(event)">${F('email','Email',a.email||'','email','required')}${F('name','Full name',a.name||'','text','required')}${F('dob','Date of birth',a.dob||'','date','required')}${F('mobile','Mobile number',a.mobile||'','tel')}${F('college','College (if known)',a.college||'')}${F('course','Course',a.course||'')}<div class="lb">10th marks, subject by subject</div>${SR(m)}${FILE('ph','Passport-size photo',a.photo)}<label>Marksheet (JPEG, PNG or PDF)<input class="in" type="file" accept="image/*,.pdf" onchange="smartUp(this.files[0],r=>{TMP.ms=r.ok?r.key:'';$('#msr').innerHTML=r.ok?'Uploaded: '+E(r.key):'<span class=er>'+E(r.why)+'</span>'})"></label><div id="msr" class="mu">${a.ms?'Uploaded: '+E(a.ms):''}</div>${MM()}<div class="rw"><button class="ol" name="act" value="draft" ${cy?'':'disabled'}>Save draft</button><button class="bt" name="act" value="submit" ${cy?'':'disabled'}>Submit application</button></div></form><button class="ol" onclick="V.fg=0;V.ap=null;V.mm='';draw()">${t('back')}</button>`}
+function apLoad(e){const f=fd(e),cy=openCy(),a=cy&&S.apps.find(x=>x.email==f.get('em').trim()&&x.cy==cy.id&&x.status=='draft');V.mm=a?'':'No saved draft was found for that email.';V.ap=a?JSON.parse(JSON.stringify(a)):null;draw();return false}
+function apSave(e){const act=e.submitter&&e.submitter.value,f=fd(e),cy=openCy();if(!cy){V.mm='Applications are closed.';draw();return false}
+ const email=f.get('email').trim(),old=S.apps.find(x=>x.email==email&&x.cy==cy.id);
+ if(old&&old.status!='draft'){V.mm='An application from this email was already submitted.';draw();return false}
+ const mk=subs(f),a=old||{id:'A'+cy.year%100+'-'+String(S.apps.length+1).padStart(4,'0'),cy:cy.id,status:'draft',hist:[],vr:{up:{},q:'open'},reason:''};
+ Object.assign(a,{email,name:f.get('name'),dob:f.get('dob'),mobile:f.get('mobile'),college:f.get('college'),course:f.get('course'),marks:mk});
+ if(TMP.ph){a.photo=TMP.ph;a.prep=TMP.phr||a.prep}if(TMP.ms)a.ms=TMP.ms;
+ if(act=='submit'){if(!a.photo){V.mm='Upload a passport-size photo that passes the checks.';V.ap=a;draw();return false}if(!mk.length){V.mm='Enter at least one subject.';V.ap=a;draw();return false}
+  a.status='submitted';a.hist.push({t:NOW(),who:'applicant',from:'draft',to:'submitted',reason:''});emit('application.submitted',a.id,{});V.aok='Your application '+a.id+' was submitted. Keep this number.'}else{a.status='draft';V.aok='Your draft was saved. Come back with your email to continue.'}
+ if(!old)S.apps.push(a);TMP={};save();V.ap=null;V.mm='';draw();return false}
+function setApp(a,st,reason){const from=a.status;a.status=st;a.reason=reason||'';a.hist.push({t:NOW(),who:U.id,from,to:st,reason:reason||''});
+ if(st=='selected'){const y=(S.cycles.find(c=>c.id==a.cy)||{}).year||new Date().getFullYear(),pre='MF'+String(y).slice(2)+'-',n=S.roster.filter(r=>r.id.startsWith(pre)).length+1,id=pre+String(n).padStart(4,'0');S.roster.push({id,kind:'student',name:a.name,mobile:a.mobile||'',college:a.college||'',course:a.course||'',year:y,dob:a.dob,email:a.email,fromApp:a.id});a.roster=id}
+ emit('application.'+st,a.id,{rid:a.roster||''})}
+function bulk(st){const ids=[...document.querySelectorAll('.apc:checked')].map(x=>x.value),why=$('#rs').value.trim();
+ if(!ids.length){V.mm='Tick at least one application.';keep();return}
+ if((st=='selected'||st=='rejected')&&!why){V.mm='A reason is required to select or reject.';keep();return}
+ let n=0;ids.forEach(i=>{const a=S.apps.find(x=>x.id==i),ok=st=='shortlisted'?a.status=='submitted':/^(submitted|shortlisted)$/.test(a.status);if(ok){setApp(a,st,why);n++}});V.mm=n+' application(s) changed.';save();draw()}
+function admV(){if(V.aid)return appDV(V.aid);const cyc=V.cyc||(S.cycles[S.cycles.length-1]||{}).id,list=S.apps.filter(a=>a.cy==cyc&&a.status!='draft'),rq=S.apps.filter(a=>a.status!='draft'&&needsRev(a)&&(a.vr||{}).q!='resolved'),sts=['submitted','shortlisted','selected','rejected'];
+ return `${bk()}<h1>Admissions</h1>${MM()}${isAdm()?`<form class="cd" onsubmit="return cyN(event)"><b>New admission cycle</b>${F('year','Year','','number','required')}${F('opens','Opens','','date','required')}${F('closes','Closes','','date','required')}<button class="bt">Create and open</button></form>`:''}
+ <div class="cd"><b>Cycle</b><select class="in" onchange="V.cyc=this.value;draw()">${S.cycles.map(c=>`<option value="${c.id}" ${c.id==cyc?'selected':''}>${E(c.name)} · ${c.status}</option>`).join('')}</select>${isAdm()?`<button class="ol" onclick="cyT('${cyc}')">Open or close this cycle</button>`:''}</div>
+ <div class="cd"><b>Applications</b><table class="t"><tr><th></th><th>Name</th><th>Status</th><th>Checks</th><th></th></tr>${list.map(a=>`<tr><td><input type="checkbox" class="apc" value="${a.id}" aria-label="Select ${E(a.name)}"></td><td>${E(a.name)}</td><td>${B2(a.status)}</td><td>${needsRev(a)&&(a.vr||{}).q!='resolved'?'Needs review':'OK'}</td><td><button class="ol" style="height:34px" onclick="V.aid='${a.id}';draw()">Open</button></td></tr>`).join('')}</table><input class="in" id="rs" placeholder="Reason (required to select or reject)"><div class="rw"><button class="ol" onclick="bulk('shortlisted')">Shortlist</button><button class="bt" onclick="bulk('selected')">Select</button><button class="ol" onclick="bulk('rejected')">Reject</button></div></div>
+ <div class="cd"><b>Review queue (${rq.length})</b>${rq.map(a=>`<div class="rw"><span>${E(a.name)}</span><button class="ol" style="height:34px" onclick="V.aid='${a.id}';draw()">Review</button></div>`).join('')||'<p class="mu">Nothing to review.</p>'}</div>
+ <div class="cd"><b>Year over year</b><table class="t"><tr><th>Cycle</th>${sts.map(s=>`<th>${s}</th>`).join('')}</tr>${S.cycles.map(c=>`<tr><td>${c.year}</td>${sts.map(s=>`<td>${S.apps.filter(a=>a.cy==c.id&&a.status==s).length}</td>`).join('')}</tr>`).join('')}</table></div>`}
+function cyN(e){const f=fd(e);S.cycles.push({id:'c'+f.get('year'),year:+f.get('year'),name:f.get('year')+' intake',opens:f.get('opens'),closes:f.get('closes'),status:'open'});emit('cycle.created',f.get('year'),{});save();draw();return false}
+function cyT(id){const c=S.cycles.find(x=>x.id==id);c.status=c.status=='open'?'closed':'open';emit('cycle.'+c.status,id,{});save();draw()}
+function appDV(id){const a=S.apps.find(x=>x.id==id),c=vrChecks(a),rv=needsRev(a)&&(a.vr||{}).q!='resolved';
+ return `<button class="ol" onclick="V.aid=null;draw()">${t('back')}</button><h1>${E(a.name)}</h1><div class="cd"><div class="rw"><b>${a.id}</b>${B2(a.status)}</div><div class="mu">${E(a.email)} · ${E(a.dob||'')} · ${E(a.college||'')} ${E(a.course||'')}</div>${a.photo?`<img class="th" src="${a.photo}" alt="">`:''}${a.reason?`<p>Reason: ${E(a.reason)}</p>`:''}</div>
+ <div class="cd"><b>Validation report</b><table class="t"><tr><th>Check</th><th>Result</th><th>Details</th></tr>${c.map(x=>`<tr><td>${E(x[0])}</td><td><b>${/^(pass|match)$/.test(x[1])?'✓ ':'✗ '}${x[1]}</b></td><td>${E(x[2])}</td></tr>`).join('')}</table><p class="mu">Reading marks from the uploaded marksheet needs a reading service that is not in this pilot. Type what the marksheet shows and the app compares it.</p></div>
+ <form class="cd" onsubmit="return upV(event,'${a.id}')"><b>Values on the uploaded marksheet</b>${(a.marks||[]).map((m,i)=>`<label>${E(m.s)}<input class="in" name="u${i}" type="number" step="any" value="${E(((a.vr||{}).up||{})[m.s])}"></label>`).join('')}<button class="bt">Compare</button></form>
+ ${rv?`<form class="cd" onsubmit="return rqR(event,'${a.id}')"><b>Review decision</b>${SEL('d','Decision',['Accepted','Rejected','Needs a new upload'])}${F('n','Note','')}<button class="bt">Close review</button></form>`:`<div class="cd">${(a.vr||{}).q=='resolved'?'Review closed'+((a.vr||{}).note?': '+E(a.vr.note):''):'No review needed.'}</div>`}
+ <h2>History</h2>${(a.hist||[]).map(h=>`<div class="cd"><div class="mu">${fmt(h.t)} · ${E(h.who)}</div>${h.from||'new'} → ${h.to}${h.reason?'<br>'+E(h.reason):''}</div>`).join('')||'<p class="mu">No history.</p>'}`}
+function upV(e,id){const f=fd(e),a=S.apps.find(x=>x.id==id);a.vr=a.vr||{up:{},q:'open'};(a.marks||[]).forEach((m,i)=>{const v=f.get('u'+i);if(v!=='')a.vr.up[m.s]=v});save();draw();return false}
+function rqR(e,id){const f=fd(e),a=S.apps.find(x=>x.id==id);a.vr.q='resolved';a.vr.note=f.get('d')+(f.get('n')?': '+f.get('n'):'');emit('review.closed',id,{});save();draw();return false}
+
+/* ---- event log screen and admin console ---- */
+function evtV(){const vv=vis();return `${bk()}<h1>Event log</h1><p class="mu">Every important change is saved as an event in the same save as the change. Workers read events after their bookmark. Events from a transaction that is still running are held back, so a late commit is never skipped. A message key stops duplicate emails.</p>${MM()}`+['mailer','career'].map(n=>{const c=S.cons[n],behind=vv.filter(e=>after(c,e)).length;return `<div class="cd"><div class="rw"><b>${n} worker</b><span class="pl ${c.down?'needs':'verified'}">${c.down?'stopped':'running'}</span></div><div class="mu">Bookmark ${c.tx}:${c.seq} · ${behind} events waiting</div><div class="rw"><button class="ol" onclick="wk('${n}','run')">Run now</button><button class="ol" onclick="wk('${n}','start')">Replay from start</button><button class="ol" onclick="wk('${n}','down')">${c.down?'Restart':'Stop (outage)'}</button></div><label>Replay from a time<input class="in" id="rt_${n}" type="datetime-local"></label><button class="ol" onclick="wk('${n}','time')">Replay from this time</button></div>`}).join('')+`<div class="cd"><b>Out-of-order test</b><p class="mu">A slow transaction ${S.inflight.length?'is running':'is not running'}.</p><div class="rw"><button class="ol" onclick="slowB()">1. Start slow transaction</button><button class="ol" onclick="evTest()">2. Save another event</button><button class="ol" onclick="slowC()">3. Commit slow transaction</button></div><button class="ol" onclick="dupT()">Send the same event twice</button></div><h2>Recent events</h2><table class="t"><tr><th>Seq</th><th>Tx</th><th>Type</th><th>By</th></tr>${S.events.slice(-30).reverse().map(e=>`<tr><td>${e.seq}</td><td>${e.tx}</td><td>${E(e.type)}<br><span class="mu">${E(e.agg)}</span></td><td>${E(e.by||'')}</td></tr>`).join('')}</table><h2>Messages sent</h2>`+(S.notes.slice(-15).reverse().map(n=>`<div class="cd"><div class="mu">${n.ch} to ${E(NM(n.to))} · ${fmt(n.at)}</div>${E(n.msg)}</div>`).join('')||'<p class="mu">None yet.</p>')}
+function wk(n,a){const c=S.cons[n],before=S.notes.length;
+ if(a=='down')c.down=!c.down;
+ else if(a=='start'||a=='time'){let tx=0,seq=0;if(a=='time'){const v=$('#rt_'+n).value,tt=v?new Date(v).getTime():0,prev=vis().filter(e=>e.at<tt).pop();if(prev){tx=prev.tx;seq=prev.seq}}c.tx=tx;c.seq=seq;if(n=='career'){S.hist={};S.cur={};S.cands={}}c.down=false}
+ save();V.mm=(a=='run'||a=='start'||a=='time')?'Done. '+(S.notes.length-before)+' new messages (duplicates were skipped).':'';draw()}
+function slowB(){S.txc++;S.inflight.push(S.txc);V.mm='Slow transaction '+S.txc+' started. Newer events are held back until it commits.';_save();draw()}
+function evTest(){emit('demo.event','demo',{});save();V.mm='Another event was saved. Workers do not see it while the slow transaction runs.';draw()}
+function slowC(){const tx=S.inflight.shift();if(tx){S.seq++;S.events.push({seq:S.seq,tx,type:'demo.slow',agg:'demo',pl:{},at:NOW(),by:U.id});V.mm='Slow transaction committed late. Workers now read it first, in order, so nothing was missed.'}save();draw()}
+function dupT(){const k='dup-'+Math.floor(NOW()/6e4),a=emit('demo.dup','demo',{},k),b=emit('demo.dup','demo',{},k);V.mm='First event saved: '+a+'. Second event saved: '+b+' (a duplicate is ignored).';save();draw()}
+function cfgV(){const c=S.cfg;return `${bk()}<h1>Admin</h1>
+ <form class="cd" onsubmit="return cfS2(event)"><b>Settings</b>${F('nudgeH','Nudge a coordinator after (hours without an update)',c.nudgeH,'number','step="any"')}${F('overdueH','A query is overdue after (hours)',c.overdueH,'number','step="any"')}${F('escH','Escalate after (hours)',c.escH,'number','step="any"')}${F('quietD','A volunteer is going quiet after (days)',c.quietD,'number')}${F('maxMB','Largest upload (MB)',c.maxMB,'number','step="any"')}${F('reqSubj','Required subjects for the marksheet check',c.reqSubj)}<p class="mu">These are demo values. Maatram sets the real ones.</p><button class="bt">Save settings</button></form>
+ <div class="cd"><b>Categories and assignment rules</b><div class="mu">${S.cats.join(', ')}</div><form onsubmit="return catA(event)">${F('c','New category','')}<button class="ol">Add category</button></form><form onsubmit="return ruleA(event)">${SEL('cat','Category',S.cats)}${SEL('to','Coordinator',S.roster.filter(r=>r.sub=='coordinator').map(r=>r.id))}<button class="ol">Add rule</button></form>${S.rules.map((r,i)=>`<div class="rw"><span>${r.cat} → ${E(NM(r.to))}</span><button class="ol" style="height:34px" onclick="S.rules.splice(${i},1);save();keep()">Remove</button></div>`).join('')}</div>
+ <div class="cd"><b>Users and roles</b>${S.roster.filter(r=>r.kind=='staff').map(r=>`<div class="rw"><span>${r.id} · ${E(r.name)}</span><select class="in" style="width:auto" onchange="R('${r.id}').sub=this.value;save()">${['office','admin','coordinator','rep'].map(x=>`<option ${x==r.sub?'selected':''}>${x}</option>`).join('')}</select></div>`).join('')}</div>
+ <div class="cd"><b>Housekeeping</b><div class="rw"><button class="ol" onclick="oldD()">Remove old data</button><button class="ol" onclick="S.clock=(S.clock||0)+24;save();keep()">Move the clock +1 day</button></div><p class="mu">Clock moved by ${S.clock||0} hours (demo, so reminders can be tried). Old data means closed queries and cancelled sessions. The activity log is the event log.</p>${MM()}</div>
+ <div class="cd"><b>Smart upload test</b><p class="mu">Browsers ask for a short-lived link, upload straight to storage, and the server checks type and size. Storage is a setting, so changing provider is a configuration change. Here it is simulated. Limit ${c.maxMB} MB. JPEG, PNG or PDF.</p><input class="in" type="file" onchange="suT(this.files[0])"><div id="su"></div></div>
+ <div class="cd"><b>Moving from scattered channels</b><ol><li>Give every channel one place to land: this form.</li><li>Representatives log WhatsApp and phone queries as they arrive.</li><li>Bring in the shared inbox if available.</li><li>Stop answering outside the system once the team is comfortable.</li></ol><p><b>Privacy:</b> students see only their own queries, coordinators only the queries assigned to them, representatives only the ones they logged, and admins everything. Every change is in the history, and attachments are kept in private storage.</p></div>`}
+function cfS2(e){const f=fd(e),c=S.cfg;['nudgeH','overdueH','escH','quietD','maxMB'].forEach(k=>c[k]=+f.get(k));c.reqSubj=f.get('reqSubj');emit('settings.changed','cfg',{});save();draw();return false}
+function catA(e){const f=fd(e),c=f.get('c').trim();if(c&&!S.cats.includes(c))S.cats.push(c);save();draw();return false}
+function ruleA(e){const f=fd(e);S.rules.push({cat:f.get('cat'),to:f.get('to')});save();draw();return false}
+function oldD(){const n=S.q.length+S.sess.length;S.q=S.q.filter(q=>q.status!='closed');S.sess=S.sess.filter(s=>s.status!='cancelled');emit('admin.cleanup','x',{});V.mm=(n-S.q.length-S.sess.length)+' old items removed.';save();draw()}
+
+/* ---- menus and screens that tie everything together ---- */
+const moreV=()=>`<h1>${t('more')}</h1>${[['avail','Availability'],['help','Ask for help'],['vol','Volunteering opportunities'],['conn',connLbl()],['chat','Chats'],['upd','Updates'],['cal','Events'],['msgs','Messages ('+S.notes.filter(n=>n.to==U.id).length+')']].map(([k,l])=>`<button class="ol" style="display:block;width:100%;text-align:left;margin:8px 0" onclick="V.m='${k}';draw()">${l}</button>`).join('')}<button class="ol" style="display:block;width:100%;text-align:left" onclick="V.tab='prof';draw()">${t('prof')}</button>`;
+function MENU(){const r=U.role,s=U.sub,b=(k,l)=>`<button class="ol" style="height:38px;margin:4px 4px 4px 0" onclick="V.m='${k}';V.mm='';draw()">${l}</button>`;
+ if(r=='staff'&&/^(office|admin)$/.test(s))return `<div>${b('sess','Sessions')}${b('qs','Queries')}${b('vols','Volunteering')}${b('adm','Admissions')}${b('cars','Alumni careers')}${b('safe','Safeguarding')}${b('upd','Updates')}${b('cal','Events')}${s=='admin'?b('evt','Event log')+b('cfg','Admin'):''}</div>`;
+ if(r=='alumni')return `<div>${b('car','My career')}${b('vol','Volunteering')}${b('conn','Connections')}${b('chat','Chats')}${b('msgs','Messages')}${b('upd','Updates')}${b('cal','Events')}</div>`;
+ return ''}
+const MV=m=>({upd:updV,cal:calV,chat:chatV,safe:safeV,conn:connV,avail:availV,help:helpV,vol:volV,msgs:msgsV,sess:sessV,qs:qsV,vols:volsV,adm:admV,car:carV,cars:carsV,evt:evtV,cfg:cfgV})[m]();
+const staffHome=()=>isOff()?officeV():`<h1>Hi, ${E(NM(U.id))}</h1><p class="mu">${U.sub=='coordinator'?'Coordinator':'Student representative'}</p>`+qsV();
+const volHome=()=>volV();
+
+/* ---- legacy actions also write events (same save as the change) ---- */
+const _rev=rev;rev=function(k,a,b,ok){emit(ok?'entry.verified':'entry.needs_correction',k+':'+a+(b?':'+b:''),{});return _rev(k,a,b,ok)};
+const _mS=mSave;mSave=function(e){emit('marks.submitted',U.id,{});return _mS(e)};
+const _aS=aSave;aSave=function(e){emit('achievement.submitted',U.id,{});return _aS(e)};
+const _vS=vSave;vSave=function(e){emit('volunteering.entry_submitted',U.id,{});return _vS(e)};
+/* ---- directory and connection requests (ideas from the reference review; no copied content) ---- */
+S.conn=S.conn||[];S.dirv=S.dirv||{};V.dq=V.dq||{q:'',role:'',batch:'',college:'',stream:'',co:''};V.ctab=V.ctab||'dir';
+const isDirUser=id=>{const u=S.users[id];return !!u&&(u.role=='alumni'||u.role=='student')&&!!R(id)};
+const inDir=id=>{if(!isDirUser(id))return false;if(S.users[id].role=='student'&&isMinor(id)&&!S.gcons[id])return false;return S.users[id].role=='alumni'?S.dirv[id]!==false:S.dirv[id]===true};
+const streamOf=id=>{const r=R(id)||{};return dur(r.course)==4?'Engineering':'Arts'};
+const coOf=id=>((S.cur[id]||{}).name)||'';
+const connRow=(a,b)=>S.conn.find(c=>c.from==a&&c.to==b);
+const pairRow=(v,id)=>U.role=='alumni'?connRow(v,id):connRow(id,v);
+const connState=(v,id)=>{const r=pairRow(v,id);return r?r.st:'none'};
+const dirPool=()=>Object.keys(S.users).filter(id=>id!=U.id&&inDir(id)&&(U.role=='alumni'||S.users[id].role=='alumni'));
+const connLbl=()=>{const n=U&&U.role=='student'?S.conn.filter(c=>c.to==U.id&&c.st=='pending').length:0;return 'Connections'+(n?' ('+n+' new)':'')};
+function connReq(id){const v=U.id;if(!(U.role=='alumni'&&S.users[id]&&S.users[id].role=='student'&&inDir(id)&&!connRow(v,id)))return;
+ S.conn.push({from:v,to:id,st:'pending',at:NOW()});
+ note(id,'in app',NM(v)+' would like to connect with you. Open Connections to accept or decline.','conn|'+v+'|'+id);
+ emit('connection.requested',v+':'+id,{to:id});save();keep()}
+function connAns(from,ans){const r=connRow(from,U.id);if(!r||r.st!='pending'||U.role!='student')return;
+ r.st=ans;r.at=NOW();
+ if(ans=='accepted')note(from,'in app',NM(U.id)+' accepted your request. You are now connected.','connok|'+from+'|'+U.id);
+ emit('connection.'+ans,from+':'+U.id,{});save();keep()}
+const DQ=()=>V.dq||(V.dq={q:'',role:'',batch:'',college:'',stream:'',co:''});
+function dq(k,v){DQ()[k]=v;const el=$('#dlist');if(el)el.innerHTML=dirList()}
+function memCard(id){const r=R(id)||{},isA=S.users[id].role=='alumni',st=connState(U.id,id),co=coOf(id);
+ const badge=`<span class="pl ${isA?'verified':''}">${isA?'Alumnus':'Student'}</span>`;let act='';
+ if(U.role=='alumni'&&!isA){
+  act=st=='none'?`<button class="bt" onclick="connReq('${id}')">Request to connect</button>`
+     :st=='pending'?'<span class="mu">Request sent. Waiting for a reply.</span>'
+     :st=='accepted'?'<span class="pl verified">Connected</span>'
+     :'<span class="mu">Not connected</span>';
+ }else if(U.role=='student'&&isA){
+  act=st=='accepted'?'<span class="pl verified">Connected</span>'
+     :st=='pending'?'<button class="ol" onclick="V.ctab=\'req\';draw()">Open request</button>'
+     :'<span class="mu">Not connected</span>';
+ }
+ return `<div class="cd"><b>${E(NM(id))}</b> ${badge}<div class="mu">Joined ${E(r.year)} · ${E(r.college)} · ${streamOf(id)}${co?' · '+E(co):''}</div><div style="margin-top:8px">${act}</div></div>`}
+function dirList(){const d=DQ(),q=(d.q||'').trim().toLowerCase();
+ const ids=dirPool().filter(id=>{const r=R(id)||{};
+  if(d.role&&S.users[id].role!=d.role)return false;
+  if(d.batch&&String(r.year)!=d.batch)return false;
+  if(d.college&&r.college!=d.college)return false;
+  if(d.stream&&streamOf(id)!=d.stream)return false;
+  if(d.co&&coOf(id)!=d.co)return false;
+  if(q&&!(NM(id)+' '+(r.college||'')+' '+coOf(id)).toLowerCase().includes(q))return false;return true})
+  .sort((a,b)=>NM(a).localeCompare(NM(b)));
+ const none=dirPool().length?'<p class="mu">No one matches these filters. Clear a filter to see more.</p>':'<p class="mu">No members are listed yet. Students appear here after they switch on "Show me in the directory".</p>';
+ return `<p class="mu">${ids.length} shown</p>`+(ids.map(memCard).join('')||none)}
+function reqCard(c){const r=R(c.from)||{};return `<div class="cd"><b>${E(NM(c.from))}</b> <span class="pl verified">Alumnus</span><div class="mu">Joined ${E(r.year)} · ${E(r.college)}${coOf(c.from)?' · '+E(coOf(c.from)):''}</div><div class="rw" style="margin-top:8px"><button class="bt" onclick="connAns('${c.from}','accepted')">Accept</button><button class="ol" onclick="connAns('${c.from}','declined')">Decline</button></div></div>`}
+function reqBody(){
+ if(U.role=='student'){
+  const inc=S.conn.filter(c=>c.to==U.id&&c.st=='pending'),acc=S.conn.filter(c=>c.to==U.id&&c.st=='accepted');
+  return `<h2>Requests from alumni</h2>`+(inc.map(reqCard).join('')||'<p class="mu">No requests waiting. Alumni can send a request once you show your profile in the directory.</p>')
+   +`<h2>Connected</h2>`+(acc.map(c=>{const r=R(c.from)||{};return `<div class="cd"><b>${E(NM(c.from))}</b><div class="mu">Alumnus · Joined ${E(r.year)} · ${E(r.college)}</div></div>`}).join('')||'<p class="mu">No connections yet.</p>');
+ }
+ const sent=S.conn.filter(c=>c.from==U.id);
+ return `<h2>Requests you sent</h2>`+(sent.map(c=>{const r=R(c.to)||{};return `<div class="cd rw"><div><b>${E(NM(c.to))}</b><div class="mu">Student · Joined ${E(r.year)}</div></div>${c.st=='accepted'?'<span class="pl verified">Connected</span>':c.st=='pending'?'<span class="mu">Waiting for a reply</span>':'<span class="mu">Not connected</span>'}</div>`}).join('')||'<p class="mu">You have not sent any requests yet. Find students in the Directory tab.</p>')}
+function connV(){const tab=V.ctab||'dir',pend=U.role=='student'?S.conn.filter(c=>c.to==U.id&&c.st=='pending').length:0;
+ const tabs=`<div class="sg"><button class="${tab=='dir'?'on':''}" onclick="V.ctab='dir';draw()">Directory</button><button class="${tab=='req'?'on':''}" onclick="V.ctab='req';draw()">Requests${pend?' ('+pend+')':''}</button></div>`;
+ if(tab=='req')return `${bk()}<h1>Connections</h1>${tabs}${reqBody()}`;
+ const d=DQ(),pool=dirPool(),opts=(arr,val,lbl)=>arr.map(x=>`<option value="${E(x)}"${d[val]==x?' selected':''}>${E(lbl?lbl(x):x)}</option>`).join('');
+ const years=[...new Set(pool.map(id=>(R(id)||{}).year).filter(Boolean))].sort(),cols=[...new Set(pool.map(id=>(R(id)||{}).college).filter(Boolean))].sort(),cos=[...new Set(pool.map(coOf).filter(Boolean))].sort();
+ const vis=U.role=='alumni'?'On by default. Students can send you a request.':'Off by default. Alumni can see you only if you switch this on.';
+ return `${bk()}<h1>Connections</h1>${tabs}
+ ${visBox()}
+ <div class="cd"><input class="in" aria-label="Search" placeholder="Search by name, college or company" value="${E(d.q)}" oninput="dq('q',this.value)">
+  <div class="r" style="margin-top:8px">
+   ${U.role=='alumni'?`<select class="in" aria-label="Type" onchange="dq('role',this.value)"><option value="">Any type</option><option value="alumni"${d.role=='alumni'?' selected':''}>Alumni</option><option value="student"${d.role=='student'?' selected':''}>Students</option></select>`:''}
+   <select class="in" aria-label="Batch" onchange="dq('batch',this.value)"><option value="">Any batch</option>${opts(years,'batch',x=>'Joined '+x)}</select>
+  </div>
+  <div class="r">
+   <select class="in" aria-label="College" onchange="dq('college',this.value)"><option value="">Any college</option>${opts(cols,'college')}</select>
+   <select class="in" aria-label="Stream" onchange="dq('stream',this.value)"><option value="">Any stream</option><option${d.stream=='Engineering'?' selected':''}>Engineering</option><option${d.stream=='Arts'?' selected':''}>Arts</option></select>
+  </div>
+  ${cos.length?`<select class="in" aria-label="Company" onchange="dq('co',this.value)"><option value="">Any company</option>${opts(cos,'co')}</select>`:''}
+ </div>
+ <div id="dlist">${dirList()}</div>`}
+
+/* ---- messaging with the under-18 rule (defaults, to be confirmed by Maatram) ---- */
+S.msgs=S.msgs||[];S.reports=S.reports||[];S.gcons=S.gcons||{};
+const ageOf=id=>{const d=(S.prof[id]||{}).dob;if(!d)return null;const b=new Date(d+'T00:00:00'),n=new Date();let a=n.getFullYear()-b.getFullYear();if(n<new Date(n.getFullYear(),b.getMonth(),b.getDate()))a--;return a};
+const isMinor=id=>{const a=ageOf(id);return a!==null&&a<18&&!!S.users[id]&&S.users[id].role=='student'};
+const pairKey=(a,b)=>[a,b].sort().join('|');
+const acceptedWith=(a,b)=>S.conn.some(c=>c.st=='accepted'&&((c.from==a&&c.to==b)||(c.from==b&&c.to==a)));
+const isMentorOf=(alum,stu)=>(S.links[stu]||[]).includes(alum)&&!!S.users[alum]&&S.users[alum].role=='alumni';
+function canMessage(a,b){if(!a||!b||a==b)return false;const ua=S.users[a],ub=S.users[b];if(!ua||!ub)return false;
+ if(!['student','alumni'].includes(ua.role)||!['student','alumni'].includes(ub.role))return false;
+ if(ua.role==ub.role)return false;
+ const stu=ua.role=='student'?a:b,alum=ua.role=='student'?b:a;
+ if(isMinor(stu))return isMentorOf(alum,stu);
+ return acceptedWith(a,b)}
+function partners(id){const out=new Set();
+ S.conn.forEach(c=>{if(c.st!='accepted')return;if(c.from==id)out.add(c.to);if(c.to==id)out.add(c.from)});
+ Object.keys(S.links||{}).forEach(stu=>(S.links[stu]||[]).forEach(alum=>{if(alum==id)out.add(stu);if(stu==id)out.add(alum)}));
+ return [...out].filter(p=>canMessage(id,p))}
+function threadMsgs(a,b){return S.msgs.filter(m=>(m.from==a&&m.to==b)||(m.from==b&&m.to==a))}
+function sendMsg(to,text){const from=U.id,t=(text||'').trim();if(!t||t.length>500||!canMessage(from,to))return false;
+ const m={id:Date.now()+Math.random(),from,to,text:t,at:NOW(),read:false,rep:false};S.msgs.push(m);
+ note(to,'in app','You have a new message in Chats.','msg|'+m.id);emit('message.sent',pairKey(from,to),{msgId:m.id});save();return true}
+function sendForm(e,p){e.preventDefault();const ok=sendMsg(p,new FormData(e.target).get('t'));V.mm=ok?'':'Message not sent. Check that you can chat with this person.';keep();return false}
+function repMsg(id){const m=S.msgs.find(x=>x.id==id);if(!m||m.to!=U.id||m.rep)return;m.rep=true;
+ S.reports.push({id:Date.now()+Math.random(),msg:m.id,by:U.id,at:NOW(),from:m.from,to:m.to,text:m.text,status:'open'});
+ note('O001','in app','A message was reported. Open Safeguarding.','rep|'+m.id);emit('message.reported',String(m.id),{});save();keep()}
+function resolveRep(id){const r=S.reports.find(x=>x.id==id);if(r){r.status='reviewed';save();keep()}}
+function chatList(){const u=U.id,ps=partners(u);
+ const rules=U.role=='alumni'?'You can chat with students you are connected with. You can chat with a student under 18 only if they chose you as a mentor.':'You can chat with people you are connected with. If you are under 18, you can chat only with the mentors you chose.';
+ return `${bk()}<h1>Chats</h1><p class="mu">${rules}</p>`+(ps.map(p=>{const ms=threadMsgs(p,u),unread=ms.filter(m=>m.to==u&&!m.read).length,last=ms[ms.length-1];
+  return `<div class="cd rw"><div><b>${E(NM(p))}</b>${unread?' <span class="pl verified">'+unread+' new</span>':''}<div class="mu">${last?E(last.text.slice(0,50)):'No messages yet'}</div></div><button class="ol" onclick="V.chatWith='${p}';draw()">Open</button></div>`}).join('')
+  ||'<p class="mu">No chats yet. Chats open after a connection is accepted, or for a student under 18 with their chosen mentors.</p>')}
+function chatThread(p){const u=U.id,ms=threadMsgs(p,u);ms.forEach(m=>{if(m.to==u)m.read=true});
+ return `<button class="ol" onclick="V.chatWith=null;draw()">${t('back')}</button><h1>${E(NM(p))}</h1>${MM()}`
+  +ms.map(m=>`<div class="cd" style="margin-left:${m.from==u?'36px':'0'};margin-right:${m.from==u?'0':'36px'}"><div class="mu">${m.from==u?'You':E(NM(p))} · ${E(m.at)}</div><div>${E(m.text)}</div>${m.to==u&&!m.rep?`<button class="x" onclick="repMsg('${m.id}')">Report</button>`:m.rep&&m.to==u?'<span class="mu">Reported to the office</span>':''}</div>`).join('')
+  +(ms.length?'':'<p class="mu">No messages yet. Say hello.</p>')
+  +`<form class="cd" onsubmit="return sendForm(event,'${p}')"><textarea class="in" name="t" rows="2" maxlength="500" aria-label="Message"></textarea><button class="bt">Send</button></form>`}
+function chatV(){if(V.chatWith&&canMessage(U.id,V.chatWith))return chatThread(V.chatWith);V.chatWith=null;return chatList()}
+function safeV(){if(!isOff())return '<p class="mu">Not available for your role.</p>';
+ if(V.chatView){const [a,b]=V.chatView.split('|');return `<button class="ol" onclick="V.chatView=null;draw()">${t('back')}</button><h1>${E(NM(a))} and ${E(NM(b))}</h1><p class="mu">Read-only copy for the office. Default for review, to be confirmed by Maatram.</p>`
+  +threadMsgs(a,b).map(m=>`<div class="cd"><div class="mu">${E(NM(m.from))} · ${E(m.at)}${m.rep?' · reported':''}</div><div>${E(m.text)}</div></div>`).join('')||'<p class="mu">No messages.</p>'}
+ const th={};S.msgs.forEach(m=>{if(isMinor(m.from)||isMinor(m.to)){const k=pairKey(m.from,m.to);th[k]=th[k]||{k,n:0};th[k].n++}});
+ const open=S.reports.filter(r=>r.status=='open').length;
+ return `${bk()}<h1>Safeguarding</h1><p class="mu">Defaults, to be confirmed by Maatram: the office can read chats that involve a student under 18, and every reported message.</p>
+ <h2>Reports (${open} open)</h2>`+(S.reports.slice().reverse().map(r=>`<div class="cd"><b>${E(NM(r.from))}</b> to ${E(NM(r.to))} · ${E(r.at)}<div>${E(r.text)}</div><div style="margin-top:8px">${r.status=='open'?`<button class="bt" onclick="resolveRep(${r.id})">Mark reviewed</button>`:'<span class="mu">Reviewed</span>'}</div></div>`).join('')||'<p class="mu">No reports.</p>')
+ +`<h2>Chats involving students under 18</h2>`+(Object.values(th).map(x=>{const [a,b]=x.k.split('|');return `<div class="cd rw"><div><b>${E(NM(a))}</b> and <b>${E(NM(b))}</b><div class="mu">${x.n} messages</div></div><button class="ol" onclick="V.chatView='${x.k}';draw()">View</button></div>`}).join('')||'<p class="mu">None.</p>')}
+function visBox(){const id=U.id,minor=isMinor(id),gc=minor?`<label class="cd ck"><input type="checkbox" ${S.gcons[id]?'checked':''} onchange="S.gcons['${id}']=this.checked?NOW():null;if(!this.checked)S.dirv['${id}']=false;save();keep()"><span><b>My parent or guardian has agreed</b><br><span class="mu">Needed before you can appear in the directory. The date is recorded.</span></span></label>`:'';
+ const can=!minor||!!S.gcons[id];
+ return gc+`<label class="cd ck"><input type="checkbox" ${inDir(id)?'checked':''} ${can?'':'disabled'} onchange="S.dirv['${id}']=this.checked;save();keep()"><span><b>Show me in the directory</b><br><span class="mu">${U.role=='alumni'?'On by default. Students can send you a request.':'Off by default. Alumni can see you only if you switch this on.'} Your contact details are never shown here.</span></span></label>`}
+
+/* ---- office updates and events with RSVP (ideas from the reference review) ---- */
+S.posts=S.posts||[];S.calev=S.calev||[];S.rsvp=S.rsvp||{};S.saved=S.saved||{};V.utab=V.utab||'all';V.cvt=V.cvt||'up';
+const todayS=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const rsvpOf=eid=>S.rsvp[eid]||{};
+const goingN=eid=>Object.values(rsvpOf(eid)).filter(x=>x=='going').length;
+const canRsvp=()=>!!U&&(U.role=='student'||U.role=='alumni');
+function postUpd(e){e.preventDefault();if(!isOff())return false;const f=new FormData(e.target),title=(f.get('title')||'').trim(),body=(f.get('body')||'').trim();
+ if(!title||!body||body.length>500)return false;
+ const p={id:Date.now()+Math.random(),title,body,cat:f.get('cat'),by:U.id,at:NOW()};S.posts.push(p);
+ Object.keys(S.users).forEach(id=>{const r=S.users[id].role;if(id!=U.id&&(r=='student'||r=='alumni'))note(id,'in app','New update from the Maatram office: '+title,'upd|'+p.id+'|'+id)});
+ emit('update.posted',String(p.id),{});save();keep();return false}
+function delUpd(id){if(!isOff())return;S.posts=S.posts.filter(p=>String(p.id)!=String(id));save();keep()}
+function toggleSave(id){const k=U.id,sid=String(id);S.saved[k]=(S.saved[k]||[]).map(String);const i=S.saved[k].indexOf(sid);if(i<0)S.saved[k].push(sid);else S.saved[k].splice(i,1);save();keep()}
+function updV(){const tab=V.utab||'all',saved=(S.saved[U.id]||[]).map(String),list=S.posts.slice().reverse(),shown=tab=='saved'?list.filter(p=>saved.includes(String(p.id))):list;
+ const tabs=`<div class="sg"><button class="${tab=='all'?'on':''}" onclick="V.utab='all';draw()">All updates</button><button class="${tab=='saved'?'on':''}" onclick="V.utab='saved';draw()">Saved</button></div>`;
+ const form=isOff()?`<form class="cd" onsubmit="return postUpd(event)"><b>Post an update</b>${F('title','Title','','text','required')}<label>Category<select class="in" name="cat">${['Admissions','Sessions','Volunteer calls','General'].map(c=>`<option>${c}</option>`).join('')}</select></label><label>Message<textarea class="in" name="body" rows="3" maxlength="500" required></textarea></label><button class="bt">Post update</button></form>`:'';
+ const rows=shown.map(p=>`<div class="cd"><div class="rw"><b>${E(p.title)}</b><span class="pl">${E(p.cat)}</span></div><div class="mu">From the office · ${E(p.at)}</div><p style="margin:8px 0">${E(p.body)}</p><div class="rw"><button class="ol" onclick="toggleSave('${p.id}')">${saved.includes(String(p.id))?'Unsave':'Save'}</button>${isOff()?`<button class="x" onclick="delUpd('${p.id}')">Remove</button>`:''}</div></div>`).join('');
+ return `${bk()}<h1>Updates</h1>${form}${tabs}${rows||`<p class="mu">${tab=='saved'?'You have not saved any updates yet.':'No updates yet. The office will post here.'}</p>`}`}
+function setRsvp(eid,ans){const e=S.calev.find(x=>String(x.id)==String(eid));if(!e||!canRsvp())return;
+ S.rsvp[eid]=S.rsvp[eid]||{};
+ if(ans=='going'&&e.cap&&S.rsvp[eid][U.id]!='going'&&goingN(eid)>=e.cap)return;
+ S.rsvp[eid][U.id]=ans;emit('event.rsvp',String(eid),{ans});save();keep()}
+function postEv(e){e.preventDefault();if(!isOff())return false;const f=new FormData(e.target),title=(f.get('title')||'').trim(),date=f.get('date');
+ if(!title||!date)return false;
+ const ev={id:Date.now()+Math.random(),title,type:f.get('type'),date,time:f.get('time')||'',place:(f.get('place')||'').trim(),cap:+f.get('cap')||0,desc:(f.get('desc')||'').trim(),by:U.id};
+ S.calev.push(ev);
+ Object.keys(S.users).forEach(id=>{const r=S.users[id].role;if(id!=U.id&&(r=='student'||r=='alumni'))note(id,'in app','New event: '+title+' on '+date,'ev|'+ev.id+'|'+id)});
+ emit('event.created',String(ev.id),{});save();keep();return false}
+function delEv(id){if(!isOff())return;S.calev=S.calev.filter(x=>String(x.id)!=String(id));save();keep()}
+function calV(){const tab=V.cvt||'up',today=todayS(),all=S.calev.slice().sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+ const up=all.filter(e=>e.date>=today),past=all.filter(e=>e.date<today).reverse(),list=tab=='past'?past:up;
+ const tabs=`<div class="sg"><button class="${tab=='up'?'on':''}" onclick="V.cvt='up';draw()">Upcoming</button><button class="${tab=='past'?'on':''}" onclick="V.cvt='past';draw()">Past</button></div>`;
+ const card=e=>{const g=goingN(e.id),mine=rsvpOf(e.id)[U.id],full=!!e.cap&&g>=e.cap&&mine!='going';
+  const act=canRsvp()&&tab=='up'?`<div class="rw" style="margin-top:8px"><button class="${mine=='going'?'bt':'ol'}" onclick="setRsvp('${e.id}','going')" ${full?'disabled':''}>${mine=='going'?'Going':full?'Full':'Going'}</button><button class="${mine=='no'?'bt':'ol'}" onclick="setRsvp('${e.id}','no')">Not going</button></div>`:'';
+  const names=Object.keys(rsvpOf(e.id)).filter(k=>rsvpOf(e.id)[k]=='going').map(k=>E(NM(k))).join(', ');
+  const who=isOff()?`<div class="mu">Going: ${names||'nobody yet'}</div>`:'';
+  return `<div class="cd"><div class="rw"><b>${E(e.title)}</b><span class="pl">${E(e.type)}</span></div><div class="mu">${E(e.date)}${e.time?' · '+E(e.time):''}${e.place?' · '+E(e.place):''} · ${g}${e.cap?' of '+e.cap:''} going</div>${e.desc?`<p style="margin:8px 0">${E(e.desc)}</p>`:''}${act}${who}${isOff()?`<button class="x" onclick="delEv('${e.id}')">Remove</button>`:''}</div>`};
+ const form=isOff()?`<form class="cd" onsubmit="return postEv(event)"><b>New event</b>${F('title','Event name','','text','required')}<label>Type<select class="in" name="type">${['Give-back','Session','Career talk','Other'].map(c=>`<option>${c}</option>`).join('')}</select></label>${F('date','Date',todayS(),'date','required')}${F('time','Time','','time')}${F('place','Place','','text')}${F('cap','Places (0 means no limit)','0','number')}<label>Details<textarea class="in" name="desc" rows="2" maxlength="500"></textarea></label><button class="bt">Create event</button></form>`:'';
+ return `${bk()}<h1>Events</h1>${form}${tabs}${list.map(card).join('')||`<p class="mu">${tab=='past'?'No past events.':'No upcoming events yet.'}</p>`}`}
+
+/* ---- notification bell and Ask the office on Home (ideas from the reference review) ---- */
+const unreadN=()=>!U?0:S.notes.filter(n=>n.to==U.id&&!n.read).length;
+function bellToggle(){V.bell=!V.bell;if(V.bell){S.notes.forEach(n=>{if(n.to==U.id)n.read=true});save()}draw()}
+function bellBtn(){const n=unreadN();return `<button class="lg" aria-label="${n?'Notifications, '+n+' unread':'Notifications'}" onclick="bellToggle()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>${n?' '+n:''}</button>`}
+function bellV(){const list=S.notes.filter(n=>n.to==U.id).slice(-20).reverse();
+ return `<div class="cd" role="region" aria-label="Notifications"><div class="rw"><b>Notifications</b><button class="ol" onclick="V.bell=false;draw()">Close</button></div>`
+  +(list.map(n=>`<div style="border-top:1px solid var(--bd);padding:8px 0"><div class="mu">${E(n.ch)} · ${E(n.at)}</div><div>${E(n.msg)}</div></div>`).join('')||'<p class="mu">No notifications yet.</p>')+`</div>`}
+const onHomeNow=()=>!!U&&!V.sid&&!V.m&&!V.wiz&&(U.role=='alumni'||(U.role=='student'&&!!P(U.id).done&&(V.tab||'home')=='home'));
+function askCard(){return `<div class="cd"><b>Need help?</b><p class="mu">Ask the office about admissions, scholarships, events, mentoring or anything else. You will get a reply in the app.</p><button class="bt" onclick="V.m='help';draw()">Ask the office</button></div>`}
+
+ensure();draw();
+</script></body></html>
